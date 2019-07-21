@@ -67,7 +67,6 @@ class Clan
      * @return bool Is an old cw or not
      */
     public static function isOldCw($cw, $uuid) {
-        // TODO use hash of matchid and clan to compute gameid
         $last_cw = self::checkLastCw($uuid);
         $date=date_create($cw['datetime']);
         if ($last_cw[0] == $cw['matchid'] or $last_cw[1] > date_format($date,"Y-m-d H:i:s")) {
@@ -113,8 +112,6 @@ class Clan
                 // Check if the CW is an old CW for that clan
                 if (!self::isOldCw($cw, $clandata[$i]['uuid'])) {
                     $scan = true;
-                } else {
-                    echo "jabadabaduuu";
                 }
             }
         }
@@ -183,8 +180,6 @@ class Clan
     }
 
     public static function addCwToClan($cw, $pdo, $data) {
-        //echo json_encode($data);
-
         // Gegner als enemy anlegen
         $enemy = $pdo->prepare("INSERT IGNORE INTO enemy(EnemyUUID, ClanTag, ClanName)
             VALUES( ?, ?, ?);");
@@ -239,19 +234,13 @@ class Clan
             md5($clanuuid.$players[2]),
             md5($clanuuid.$players[3])));
 
-        // Check if the game was a BAC game
+         // Check if the game was a BAC game
         $bac = 1;
         for ($i = 0; $i < 4; $i++) {
             if ($lineup[$i]['bac'] == false) {
                 $bac = 0;
             }
         }
-
-        // game anlegen
-        $id = uniqid();
-        $newlineup = $pdo->prepare("INSERT INTO game(GameID, Win, Elo, GameTime,BACGame, MapID, LineupID, EnemyUUID, ClanUUID, MatchID)
-            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-        $newlineup->execute(array($id, $win, $data['stats']['elo'], ceil($cw['duration']), $bac, $mapid, $lineupid, $data['enemy']['uuid'], $data['clan']['uuid'], $cw['matchid']));
 
         // alle 4 spieler anlegen / updaten
 
@@ -286,10 +275,17 @@ class Clan
                 // Add member
                 $memberdb = $pdo->prepare("Insert IGNORE INTO member (PlayerID, Active, MVP, Betten, Kills, Killed, Quits, Died, BAC, ClanUUID, UUID)
 	            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $memberdb->execute(array(uniqid(), 1, 0, 0, 0, 0, 0, 0, 0, $data['clan']['uuid'], $player['uuid']));
+                $memberdb->execute(array(md5($data['clan']['uuid'].$player['uuid']), 1, 0, 0, 0, 0, 0, 0, 0, $data['clan']['uuid'], $player['uuid']));
             }
 
         }
+
+        // game anlegen
+        $id = md5($cw['matchid'] . $data['clan']['uuid']);
+        $newlineup = $pdo->prepare("INSERT INTO game(GameID, Win, Elo, GameTime,BACGame, MapID, LineupID, EnemyUUID, ClanUUID, MatchID)
+            VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+        $newlineup->execute(array($id, $win, $data['stats']['elo'], ceil($cw['duration']), $bac, $mapid, $lineupid, $data['enemy']['uuid'], $data['clan']['uuid'], $cw['matchid']));
+
 
         // stats für jeden Spieler berechnen
         foreach ($data['actions'] as &$action) {
