@@ -1,6 +1,7 @@
 <?php
 
 function addClan(String $name) : Array {
+    ini_set('max_execution_time', 600);
     $return = array();
     $return['code'] = 201;
     $return['mes'] = "$name was added successfully";
@@ -40,11 +41,14 @@ function addClan(String $name) : Array {
     $player = $pdo->prepare("INSERT IGNORE INTO player (UUID, name)
 	    VALUES (?, ?);");
 
+    $update = $pdo->prepare("UPDATE player SET name = ? WHERE UUID = ?");
+
     $memberdb = $pdo->prepare("Insert IGNORE INTO member (PlayerID, Active, MVP, Betten, Kills, Killed, Quits, Died, BAC, ClanUUID, UUID)
 	    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     foreach ($members as &$member) {
         $player->execute(array($member['id'], $member['name']));
+        $update->execute(array($member['name'], $member['id']));
         $memberdb->execute(array(md5($data['uuid'] . $member['id']), 1, 0, 0, 0, 0, 0, 0, 0, $data['uuid'], $member['id']));
     }
 
@@ -52,7 +56,7 @@ function addClan(String $name) : Array {
     file_put_contents(ROOT . "/data/tmp/lastcw/" . $data['uuid'] . ".txt", "0+0000-00-00 00:00:00");
 
     // Scan the last x CWs
-    $cws = GommeApi::fetchClanCws($data['uuid'],10);
+    $cws = GommeApi::fetchClanCws($data['uuid'],100);
 
 
     usort($cws, function ($a, $b) {
@@ -62,8 +66,11 @@ function addClan(String $name) : Array {
     });
 
     foreach ($cws as &$cw) {
+        echo "cw ". $cw['matchid'];
         Clan::addCw($cw, $pdo, $data);
+        echo " added!<br>\n";
     }
+
 
     return $return;
 

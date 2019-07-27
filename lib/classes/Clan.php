@@ -44,8 +44,8 @@ class Clan
      * @param $uuid The Clan UUID
      */
     public static function setLastCw($cw, $uuid) {
-        $date=date_create($cw['datetime']);
-        fwrite(fopen(ROOT . "/data/tmp/lastcw/" . $uuid . ".txt","w+"),$cw['matchid'] . "+" . date_format($date,"Y-m-d H:i:s"));
+        $date = date_create($cw['datetime']);
+        file_put_contents(ROOT . "/data/tmp/lastcw/" . $uuid . ".txt",$cw['matchid'] . "+" . date_format($date,"Y-m-d H:i:s"));
     }
 
     /**
@@ -136,9 +136,17 @@ class Clan
             $uuids = MojangApi::namesToUUID($players);
             for ($a = 0; $a < 2; $a++) {
                 for ($b = 0; $b < 4; $b++) {
-                    // In case there is an error and no uuid is found we still need a unique id so 0 is not good enough
-                    $player = uniqid();
+                    // In case there is an error and no uuid is found
+
+                    // First try to detect if the name was changed, there is a chance that it is written to the right person
                     $name = $data['player'][$type[$a]]['lineup'][$b]['name'];
+                    $player = NameMcApi::oldNameToUUID($name);
+
+                    if ($player == false) {
+                        // If no player is found at all we have to assign a random value
+                        $player = uniqid();
+                    }
+
 
                     // Look where the uuid is
                     foreach ($uuids as &$uuid) {
@@ -180,12 +188,15 @@ class Clan
     }
 
     public static function addCwToClan($cw, $pdo, $data) {
+
         // Gegner als enemy anlegen
         $enemy = $pdo->prepare("INSERT IGNORE INTO enemy(EnemyUUID, ClanTag, ClanName)
             VALUES( ?, ?, ?);");
         $enemy->execute(array($data['enemy']['uuid'], $data['enemy']['tag'], $data['enemy']['name']));
 
-        // TODO change enemy name if it changed
+        // Gegner name Updaten
+        $enemy = $pdo->prepare("UPDATE enemy SET ClanTag = ?, ClanName = ? WHERE EnemyUUID = ?");
+        $enemy->execute(array($data['enemy']['tag'], $data['enemy']['name'],$data['enemy']['uuid'] ));
 
         // Map
         // Schauen ob map existiert
@@ -218,23 +229,16 @@ class Clan
             $win = false;
         }
 
-        // Lineup hinzufügen
+        // Lineup info
         $lineup = $data['player'][$status]['lineup'];
 
         $players = array($lineup[0]['uuid'], $lineup[1]['uuid'], $lineup[2]['uuid'], $lineup[3]['uuid']);
         sort($players);
         $lineupid = md5($players[0] . $players[1] . $players[2] . $players[3]);
 
-        $newlineup = $pdo->prepare("INSERT INTO lineup(LineupID, ClanUUID, Player1UUID, Player2UUID, Player3UUID, Player4UUID)
-            VALUES(?, ?, ?, ?, ?, ?);");
         $clanuuid = $data['clan']['uuid'];
-        $newlineup->execute(array($lineupid, $data['clan']['uuid'],
-            md5($clanuuid.$players[0]),
-            md5($clanuuid.$players[1]),
-            md5($clanuuid.$players[2]),
-            md5($clanuuid.$players[3])));
 
-         // Check if the game was a BAC game
+        // Check if the game was a BAC game
         $bac = 1;
         for ($i = 0; $i < 4; $i++) {
             if ($lineup[$i]['bac'] == false) {
@@ -268,6 +272,11 @@ class Clan
 	            VALUES (?, ?);");
             $stm->execute(array($player['uuid'], $player['name']));
 
+            // Update Player
+            $stm = $pdo->prepare("UPDATE player SET name = ? WHERE UUID = ?");
+            $stm->execute(array($player['name'], $player['uuid']));
+
+
             // Add as member if not there already
             $statement = $pdo->prepare("SELECT Count(member.playerID) AS Amount From member Where ClanUUID = ? AND UUID = ?");
             $statement->execute(array($data['clan']['uuid'], $player['uuid']));
@@ -275,16 +284,35 @@ class Clan
                 // Add member
                 $memberdb = $pdo->prepare("Insert IGNORE INTO member (PlayerID, Active, MVP, Betten, Kills, Killed, Quits, Died, BAC, ClanUUID, UUID)
 	            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                $memberdb->execute(array(md5($data['clan']['uuid'].$player['uuid']), 1, 0, 0, 0, 0, 0, 0, 0, $data['clan']['uuid'], $player['uuid']));
+                $memberdb->execute(array(md5($data['clan']['uuid'].$player['uuid']), 1, 0, 0, 0, 0, 0, 0, 0, $data['clan']['uuid'], $player['uuid']))  or die(print_r($memberdb->errorInfo(), true));;
             }
 
         }
 
+        // Add lineup
+        $newlineup = $pdo->prepare("INSERT IGNORE INTO lineup(LineupID, ClanUUID, Player1UUID, Player2UUID, Player3UUID, Player4UUID)
+            VALUES(?, ?, ?, ?, ?, ?);");
+        $newlineup->execute(array($lineupid, $data['clan']['uuid'],
+            md5($clanuuid.$players[0]),
+            md5($clanuuid.$players[1]),
+            md5($clanuuid.$players[2]),
+            md5($clanuuid.$players[3]))) or die(print_r($newlineup->errorInfo(), true));
+
+
         // game anlegen
+
+        // Calcaulte gametime
+        $times = explode(":",$cw['duration']);
+        if (isset($times[2])) {
+            $playtime = $times[0] * 60 + $times[2];
+        } else {
+            $playtime = $times[0];
+        }
+
         $id = md5($cw['matchid'] . $data['clan']['uuid']);
         $newlineup = $pdo->prepare("INSERT INTO game(GameID, Win, Elo, GameTime,BACGame, MapID, LineupID, EnemyUUID, ClanUUID, MatchID)
             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-        $newlineup->execute(array($id, $win, $data['stats']['elo'], ceil($cw['duration']), $bac, $mapid, $lineupid, $data['enemy']['uuid'], $data['clan']['uuid'], $cw['matchid']));
+        $newlineup->execute(array($id, $win, $data['stats']['elo'], $playtime, $bac, $mapid, $lineupid, $data['enemy']['uuid'], $data['clan']['uuid'], $cw['matchid']))  or die(print_r($newlineup->errorInfo(), true));;
 
 
         // stats für jeden Spieler berechnen
@@ -327,10 +355,14 @@ class Clan
             $memberdb->execute(array($player['mvp'], $player['beds'], $player['kills'], $player['killed'], $player['quits'], $player['died'], $bac, $data['clan']['uuid'], $player['uuid']));
         }
 
-
-        // Check if Clanname changed
-        // Todo
         // Update clan last updated etc
         self::setLastCw($cw,$data['clan']['uuid']);
+
+        // Check if Clanname changed
+        $updateClan = $pdo->prepare(" UPDATE clan SET ClanTag = ?, ClanName = ?, DateUpdated = ?, LastActive = ?, LastMatch = ? Where ClanUUID = ?");
+        $updateClan->execute(array($data['clan']['tag'], $data['clan']['name'], date("Y-m-d H:i:s"), self::checkLastCw($data['clan']['uuid'])[1], self::checkLastCw($data['clan']['uuid'])[0], $data['clan']['uuid']));
+
+
+
     }
 }
