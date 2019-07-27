@@ -1,7 +1,6 @@
 <?php
 
 function get_contents($url) {
-    fopen("cookies.txt", "w");
     $parts = parse_url($url);
     $host = $parts['host'];
     $ch = curl_init();
@@ -28,7 +27,6 @@ function get_contents($url) {
     curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
     $result = curl_exec($ch);
     curl_close($ch);
-    fwrite(fopen("test.txt","w+"),$result);
     return $result;
 }
 
@@ -127,20 +125,6 @@ class GommeApi
         //Isolate ClanTag
         $response['tag'] = stringIsolateBetween($html,'class="clanTag">[',']</span>');
 
-
-        //Look if clan has Youtube
-        if (strpos($html, "a href=\"https://www.youtube.com/channel/") !== false) {
-            $response['youtube'] = stringIsolateBetween($html,"<a href=\"https://www.youtube.com/channel/","\" target=\"_blank\"> <i class=\"fa fa-youtube-play\">");
-            $html = str_replace($response['youtube']."\" target=\"_blank\">","",$html);
-            $response['youtube'] = "https://www.youtube.com/channel/".$response['youtube'];
-        }
-
-        //Look if clan has twitter
-        if (strpos($html, "<a href=\"https://twitter.com/") !== false) {
-            $html = str_replace("\" target=\"_blank\">Shop","",$html);
-            $response['twitter'] = "https://twitter.com/".stringIsolateBetween($html,"<a href=\"https://twitter.com/","\" target=\"_blank\">");
-        }
-
         //Isolate the block the other information is standing in
         $table = stringIsolateBetween($html,"class=\"table bedwars\">","</table>");
         $pieces = explode("<td",$table);
@@ -168,34 +152,37 @@ class GommeApi
             return false;
         }
 
-        $parts = explode("<div class=\"clanMembersList\">",$html);
-
-        $tmp = array();
-
+        $parts = explode("<h3 class=\"panel-title\">",$html);
+		
+        $return = array();
+		
         //Loop through each part and get the player name from the Link (/player/index?playerName=[name]"> <div class="media-object)
         for ($i=1;$i<4;$i++) {
+			$tmp = array();
+			
             if (isset($parts[$i])) {
-                $tmp[$i - 1] = array();
+                $tmp = array();
                 $parts_sub = explode("<div class=\"media\">", $parts[$i]);
+				
+				$type = $parts_sub[0];
+				array_splice($parts_sub, 0, 1);
+				
                 foreach ($parts_sub as &$part) {
                     $player = stringIsolateBetween($part, "playerName=", "\"> <div class=\"media-object");
                     if ($player != " " and $player !== null) {
-                        array_push($tmp[$i - 1], $player);
+                        array_push($tmp, $player);
                     }
                 }
+				
+				if (strpos($type, "Clan Leader") !== false) {
+					$return['leader'] = $tmp;
+				} else  if (strpos($type, "Clan Mods") !== false) {
+					$return['mods'] = $tmp;
+				} else {
+					$return['member'] = $tmp;
+				}
             }
-        }
-
-        $return = array();
-        if (isset($tmp[0][0])) {
-            $return['leader'] = $tmp[0];
-        }
-        if (isset($tmp[1][0])) {
-            $return['mods'] = $tmp[1];
-        }
-        if (isset($tmp[2][0])) {
-            $return['member'] = $tmp[2];
-        }
+        } 
 
         return $return;
     }
@@ -285,7 +272,7 @@ class GommeApi
         $cws = explode("</tr>",$html);
         $return = array();
 
-        for ($i=0;$i<$amount;$i++) {
+        for ($i=0;$i<count($cws)-1;$i++) {
             $cw = $cws[$i];
             $tmp = array();
 
@@ -326,7 +313,7 @@ class GommeApi
     }
 
     //Get CW Stats
-    //Spieltyp, Map, Gewinner Clan, Verlierer Clan, MVP, Spielstart, Spieldauer, ELO, ID, ReplayID, ChatlogID
+    //Spieltyp, Map, Gewinner Clan, Verlierer Clan, MVP, Spielstart, Spieldauer, ELO, ID, ReplayID
     public static function fetchCwStats($cw_id) {
         //https://www.gommehd.net/clan-match?id=
         $url = "https://www.gommehd.net/clan-match?id=".$cw_id;
@@ -344,6 +331,7 @@ class GommeApi
 
 
         $return = array();
+		$return['matchid'] = $cw_id;
         $return['winner'] = array();
         $return['loser'] = array();
         //14695513-cf0b-4286-a28b-cc019868f0b6
@@ -362,7 +350,7 @@ class GommeApi
             $name = str_replace(" ","",$name);
             $name = str_replace("[$tag]","",$name);
 
-            if (strpos($other, $name) !== false) {
+            if (strpos($clan, "#3984c6;") !== false) {
                 $type = "winner";
             } else {
                 $type = "loser";
@@ -376,17 +364,14 @@ class GommeApi
         $other = str_replace(stringIsolateBetween($other,"</h1>","<div>"),"",$other);
         $return['mvp'] = stringIsolateBetween($other,"playerName=","\" style=\"color:");
 
-        //Isolate ELO
-        $return['elo'] = stringIsolateBetween($html,"<td align=\"center\"><i class=\"fa fa-exchange\" aria-hidden=\"true\"></i></td>","<td align=\"center\"><i class=\"fa fa-key\" aria-hidden=\"true\"></i></td>");
-        $return['elo'] = stringIsolateBetween($return['elo'],")</td> ", "</td> </tr>");
-        $data = str_split($return['elo']);
-        $res = "";
-        foreach($data as &$char) {
-            if (is_numeric($char)) {
-                $res .= $char;
-            }
-        }
-        $return['elo'] = $res;
+        $table = stringIsolateBetween($other,"<table class=\"table mapInf\">","</a> </td> </tr> </table>");
+		$parts = explode("<tr>",$table);
+		
+		$return['datetime'] = stringIsolateBetween($parts[1],"Spielstart</td> <td>","</td> </tr>");
+		$return['duration'] = stringIsolateBetween($parts[2],"Dauer</td> <td>","</td> </tr>");
+		$return['elo'] = stringIsolateBetween($parts[3],"verloren)</td> <td>","</td> </tr>");
+		$return['replay'] = stringIsolateBetween($parts[5],"Replay-ID</td> <td> "," </td> </tr>");
+		
         return $return;
     }
 
@@ -499,7 +484,7 @@ class GommeApi
     //Get List of latest CWs
     public static function fetchLastCws($amount) {
         $url = "https://www.gommehd.net/clans/get-matches?game=bedwars&finished=true&amount=".$amount;
-        $html = get_contents("https://jkamue.de/referrer.php?url=".$url);
+        $html = get_contents($url);
         $html = stringReplaceBreaks($html);
         $cws = explode("</tr>",$html);
         $return = array();
