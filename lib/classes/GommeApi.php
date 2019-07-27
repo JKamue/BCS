@@ -153,36 +153,36 @@ class GommeApi
         }
 
         $parts = explode("<h3 class=\"panel-title\">",$html);
-		
+
         $return = array();
-		
+
         //Loop through each part and get the player name from the Link (/player/index?playerName=[name]"> <div class="media-object)
         for ($i=1;$i<4;$i++) {
-			$tmp = array();
-			
+            $tmp = array();
+
             if (isset($parts[$i])) {
                 $tmp = array();
                 $parts_sub = explode("<div class=\"media\">", $parts[$i]);
-				
-				$type = $parts_sub[0];
-				array_splice($parts_sub, 0, 1);
-				
+
+                $type = $parts_sub[0];
+                array_splice($parts_sub, 0, 1);
+
                 foreach ($parts_sub as &$part) {
                     $player = stringIsolateBetween($part, "playerName=", "\"> <div class=\"media-object");
                     if ($player != " " and $player !== null) {
                         array_push($tmp, $player);
                     }
                 }
-				
-				if (strpos($type, "Clan Leader") !== false) {
-					$return['leader'] = $tmp;
-				} else  if (strpos($type, "Clan Mods") !== false) {
-					$return['mods'] = $tmp;
-				} else {
-					$return['member'] = $tmp;
-				}
+
+                if (strpos($type, "Clan Leader") !== false) {
+                    $return['leader'] = $tmp;
+                } else  if (strpos($type, "Clan Mods") !== false) {
+                    $return['mods'] = $tmp;
+                } else {
+                    $return['member'] = $tmp;
+                }
             }
-        } 
+        }
 
         return $return;
     }
@@ -331,11 +331,13 @@ class GommeApi
 
 
         $return = array();
-		$return['matchid'] = $cw_id;
+        $tmp = array();
+        $return['matchid'] = $cw_id;
         $return['winner'] = array();
         $return['loser'] = array();
-        //14695513-cf0b-4286-a28b-cc019868f0b6
-        foreach ($clans as &$clan) {
+
+        for($i = 0; $i < 2; $i++) {
+            $clan = $clans[$i];
             $name = stringIsolateBetween($clan,"<span style=\"\"> "," </span> </a>");
 
             if($name != strip_tags($name)) {
@@ -350,28 +352,36 @@ class GommeApi
             $name = str_replace(" ","",$name);
             $name = str_replace("[$tag]","",$name);
 
-            if (strpos($clan, "#3984c6;") !== false) {
-                $type = "winner";
-            } else {
-                $type = "loser";
-            }
 
-            $return[$type]['name'] = $name;
-            $return[$type]['tag'] = $tag;
+            $tmp[$i]['name'] = $name;
+            $tmp[$i]['tag'] = $tag;
         }
 
         //Isolate MVP name
         $other = str_replace(stringIsolateBetween($other,"</h1>","<div>"),"",$other);
         $return['mvp'] = stringIsolateBetween($other,"playerName=","\" style=\"color:");
 
+        //Detect winner
+        $piece = explode("<td>Gewinner-Clan</td>",$html)[1];
+        if (strpos($piece, $tmp[0]['name']) !== false) {
+            // Clan 1 won
+            $return['winner'] = $tmp[0];
+            $return['loser'] = $tmp[1];
+        } else {
+            // Clan 2 won
+            $return['winner'] = $tmp[1];
+            $return['loser'] = $tmp[0];
+        }
+
+
         $table = stringIsolateBetween($other,"<table class=\"table mapInf\">","</a> </td> </tr> </table>");
-		$parts = explode("<tr>",$table);
-		
-		$return['datetime'] = stringIsolateBetween($parts[1],"Spielstart</td> <td>","</td> </tr>");
-		$return['duration'] = stringIsolateBetween($parts[2],"Dauer</td> <td>","</td> </tr>");
-		$return['elo'] = stringIsolateBetween($parts[3],"verloren)</td> <td>","</td> </tr>");
-		$return['replay'] = stringIsolateBetween($parts[5],"Replay-ID</td> <td> "," </td> </tr>");
-		
+        $parts = explode("<tr>",$table);
+
+        $return['datetime'] = stringIsolateBetween($parts[1],"Spielstart</td> <td>","</td> </tr>");
+        $return['duration'] = stringIsolateBetween($parts[2],"Dauer</td> <td>","</td> </tr>");
+        $return['elo'] = stringIsolateBetween($parts[3],"verloren)</td> <td>","</td> </tr>");
+        $return['replay'] = stringIsolateBetween($parts[5],"Replay-ID</td> <td> "," </td> </tr>");
+
         return $return;
     }
 
