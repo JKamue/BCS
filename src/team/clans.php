@@ -67,11 +67,11 @@ function addClan(String $name) : Array {
 
     foreach ($cws as &$cw) {
         echo "cw ". $cw['matchid'];
-        Clan::addCw($cw, $pdo, $data);
+        Clan::addCw($cw, $pdo, "bulk", $data);
         echo " added!<br>\n";
     }
 
-
+    Clan::setActiveMembers($data, $pdo);
     return $return;
 
 }

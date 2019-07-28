@@ -76,7 +76,32 @@ class Clan
         }
     }
 
-    public static function addCw($cw, $pdo, $clan1=array("name" => "null"), $clan2=array("name" => "null")) {
+    /**
+     * Sets members to active / inactive if they are / aren't in the clan
+     *
+     * @param $clan The clan info
+     * @param $pdo Database Connection
+     */
+    public static function setActiveMembers($clan,PDO $pdo) {
+        $members = GommeApi::fetchClanMembers($clan['name']);
+        $all = array();
+        $all = array_merge($all, $members['leader']);
+        $all = array_merge($all, $members['mods']);
+        $all = array_merge($all, $members['member']);
+        $all = MojangApi::namesToUUID($all);
+
+        // Set all to inactive
+        $deactivate = $pdo->prepare("UPDATE member SET Active = 0 WHERE ClanUUID = ?");
+        $deactivate->execute(array($clan['uuid']));
+
+        // Set all existing players to active
+        $activate = $pdo->prepare("UPDATE member SET Active = 1 WHERE ClanUUID = ? AND UUID = ?");
+        foreach ($all as &$player) {
+            $activate->execute(array($clan['uuid'], $player['id']));
+        }
+    }
+
+    public static function addCw($cw, $pdo, $mode="single", $clan1=array("name" => "null"), $clan2=array("name" => "null")) {
         $type = array("winner","loser");
         $scan = false;
         $clandata = array();
@@ -180,14 +205,14 @@ class Clan
 
 
                         $data['clan'] = $clandata[$i];
-                        self::addCwToClan($cw, $pdo, $data);
+                        self::addCwToClan($cw, $pdo, $data, $mode);
                     }
                 }
             }
         }
     }
 
-    public static function addCwToClan($cw, $pdo, $data) {
+    public static function addCwToClan($cw, $pdo, $data, $mode) {
 
         // Gegner als enemy anlegen
         $enemy = $pdo->prepare("INSERT IGNORE INTO enemy(EnemyUUID, ClanTag, ClanName)
@@ -362,7 +387,10 @@ class Clan
         $updateClan = $pdo->prepare(" UPDATE clan SET ClanTag = ?, ClanName = ?, DateUpdated = ?, LastActive = ?, LastMatch = ? Where ClanUUID = ?");
         $updateClan->execute(array($data['clan']['tag'], $data['clan']['name'], date("Y-m-d H:i:s"), self::checkLastCw($data['clan']['uuid'])[1], self::checkLastCw($data['clan']['uuid'])[0], $data['clan']['uuid']));
 
-
+        // If we only scan one cw of a clan and are not adding a new clan
+        if ($mode == "single") {
+            self::setActiveMembers($data['clan'],$pdo);
+        }
 
     }
 }
