@@ -10,7 +10,7 @@ class Database
      */
     public static function getConnection($name) : PDO {
         $cred = DBConfig::db()[$name];
-        return new PDO('mysql:host=' . $cred['host'] . ';dbname='.$cred['name'],
+        return new PDO('mysql:host=' . $cred['host'] . ';dbname='.$cred['name'].';charset=utf8',
             $cred['user'] , $cred['pass'] );
     }
 }
