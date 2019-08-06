@@ -10,6 +10,9 @@ spl_autoload_register(function ($class_name) {
     if (is_file(ROOT . "/lib/classes/" . $class_name . '.php')) {
         include ROOT . "/lib/classes/" . $class_name . '.php';
     }
+    if (is_file(ROOT . "/lib/data/" . $class_name . '.php')) {
+        include ROOT . "/lib/classes/" . $class_name . '.php';
+    }
 });
 
 $Session = new Session();
