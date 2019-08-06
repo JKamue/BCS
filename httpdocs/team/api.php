@@ -1,7 +1,7 @@
 <?php
 //TODO LOGIN
 include_once "../../lib/autoload.php";
-include ROOT . "/src/team/clans.php";
+include ROOT . "/src/team/api.php";
 
 if (isset($_GET['addClan'])) {
     ignore_user_abort(true);
