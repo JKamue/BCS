@@ -11,3 +11,5 @@ spl_autoload_register(function ($class_name) {
         include ROOT . "/lib/classes/" . $class_name . '.php';
     }
 });
+
+$Session = new Session();
