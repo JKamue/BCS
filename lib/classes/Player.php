@@ -3,27 +3,31 @@
 
 class Player
 {
-    public function createPlayerFromID(String $id)
+    public function createPlayerFromID(String $id) : Player
     {
-        // Todo name from mojang api
+        $name = MojangApi::UUIDToName($id);
+        return new Player($id, $name);
     }
 
-    public function createPlayerFromNameAndTime(String $name, DateTime $time)
+    public function createPlayerFromNameAndTime(String $name, $time) : Player
     {
-        // Todo get name from mojang api
+        $idAtTime = MojangApi::NameToUUUIDAtDateTime($name, $time);
+        return new Player($idAtTime, $name);
     }
 
-    public function createPlayerFromName(String $name)
+    public function createPlayerFromName(String $name) : Player
     {
-        // Todo most recent person with taht name from namemc
+        $id_guess = NameMcApi::oldNameToUUID($name);
+        return new Player($id_guess, $name);
     }
 
     private $id;
     private $name;
 
-    private function __construct(String $id, $name)
+    private function __construct(String $id, String $name)
     {
-
+        $this->id = $id;
+        $this->name = $name;
     }
 
     public function id() : String
@@ -37,6 +41,19 @@ class Player
     }
 
     public function save() {
-        // Todo implement
+        $sql = "SELECT name FROM player WHERE UUID = ?";
+        $data = Database::execute($sql, array($this->id));
+        $count = $data->rowCount();
+
+        if ($count == 0) {
+            $sql = "INSERT INTO player (UUID, name) VALUES (?, ?)";
+            Database::execute($sql, array($this->id, $this->name));
+        } else {
+            if ($data->fetchAll()[0]['name'] != $this->name) {
+                $sql = "UPDATE player SET name = ? WHERE UUID = ?";
+                Database::execute($sql, array($this->name, $this->id));
+            }
+        }
+
     }
 }
