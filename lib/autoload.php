@@ -11,7 +11,7 @@ spl_autoload_register(function ($class_name) {
         include ROOT . "/lib/classes/" . $class_name . '.php';
     }
     if (is_file(ROOT . "/lib/data/" . $class_name . '.php')) {
-        include ROOT . "/lib/classes/" . $class_name . '.php';
+        include ROOT . "/lib/data/" . $class_name . '.php';
     }
 });
 
