@@ -6,7 +6,7 @@ class NameMcApi
     /**
      * Converts an old name to the UUID that most recently used that name
      *
-     * @param $name Username
+     * @param $name String The Username
      * @return string|bool the UUID
      */
     public static function oldNameToUUID($name) {
