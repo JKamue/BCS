@@ -27,4 +27,9 @@ class MojangApi
     public static function UUIDToName($uuid){
         return json_decode(file_get_contents("https://api.mojang.com/user/profiles/$uuid/names"),true);
     }
+
+    public static function NameToUUUIDAtDateTime(String $name, $datetime) {
+        $time = DateTime::createFromFormat('Y-m-d H:i:s', $datetime)->getTimestamp();
+        return json_decode(file_get_contents("https://api.mojang.com/users/profiles/minecraft/$name?at=$time"), true);
+    }
 }
