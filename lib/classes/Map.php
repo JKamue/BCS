@@ -5,9 +5,9 @@ class Map
 {
     public static function getNewId() : Int
     {
-        $id = file_get_contents(ROOT . "data/tmp/mapcounter.txt");
+        $id = file_get_contents(ROOT . "/data/tmp/mapcounter.txt");
         $id++;
-        file_put_contents(ROOT . "data/tmp/mapcounter.txt", $id);
+        file_put_contents(ROOT . "/data/tmp/mapcounter.txt", $id);
         return $id;
     }
 
@@ -22,7 +22,7 @@ class Map
             $map->save();
         } else {
             $map_data = $map_data->fetchAll()[0];
-            $map = new Map($map_data['id'], $name);
+            $map = new Map($map_data['MapID'], $name);
         }
         return $map;
     }
@@ -36,12 +36,12 @@ class Map
         $this->name = $name;
     }
 
-    private function id() : String
+    public function id() : String
     {
         return $this->id;
     }
 
-    private function name() : String
+    public function name() : String
     {
         return $this->name;
     }

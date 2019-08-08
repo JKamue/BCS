@@ -19,6 +19,11 @@ class Enemy
         $this->name = $name;
     }
 
+    public function id() : String
+    {
+        return $this->uuid;
+    }
+
     public function save()
     {
         $sql = "SELECT ClanName FROM enemy WHERE EnemyUUID = ?";

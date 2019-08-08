@@ -29,23 +29,84 @@ class Member
         return new Member($id, $active, $mvp, $beds, $kills, $killed, $quits, $died, $bac, $clan, $player);
     }
 
-    private function __construct(String $id, Int $active, Int $mvp, Int $beds, Int $kills, Int $killed, Int $quits, Int $died, $bac, Clan $clan, Player $player)
+    private function __construct(String $id, Int $active, Int $mvp, Int $beds, Int $kills, Int $killed, Int $quits, Int $died, Int $bac, Clan $clan, Player $player)
     {
         $this->id = $id;
         $this->active = $active;
+
         $this->mvp = $mvp;
+
         $this->beds = $beds;
         $this->kills = $kills;
         $this->killed = $killed;
         $this->quits = $quits;
         $this->died = $died;
+
         $this->bac = $bac;
+
         $this->clan = $clan;
         $this->player = $player;
     }
 
-    public function id() : String {
-        return $this->id();
+
+    public function addCw(Array $match_overview, Array $match_stats, Array $match_lineup, Array $match_actions, Bool $won)
+    {
+        $status = $won === true ? "winner" : "loser";
+
+        $this->checkIfMVP($match_stats);
+        $this->addActions($match_actions);
+        $this->checkIfBac($match_lineup, $status);
+    }
+
+    private function checkIfBac($match_lineup, $status)
+    {
+        foreach ($match_lineup[$status]['lineup'] as &$player) {
+            if ($player['name'] == $this->player->name() and $player['bac'] == true) {
+                $this->bac += 1;
+            }
+        }
+    }
+
+    private function addActions($match_actions)
+    {
+        $name = $this->player->name();
+        foreach ($match_actions as &$action) {
+            if ($action['action'] == "quit") {
+                if ($action['subject'] == $name) {
+                    $this->quits += 1;
+                }
+            } else if ($action['action'] == "joined") {
+                if ($action['subject'] == $name) {
+                    $this->quits -= 1;
+                }
+            } else if ($action['action'] == "destroyed") {
+                if ($action['subject'] == $name) {
+                    $this->beds += 1;
+                }
+            } else if ($action['action'] == "killed") {
+                if ($action['subject'] == $name) {
+                    $this->kills += 1;
+                } else if ($action['object'] == $name) {
+                    $this->killed += 1;
+                }
+            } else if ($action['action'] == "died") {
+                if ($action['subject'] == $name) {
+                    $this->died += 1;
+                }
+            }
+        }
+    }
+
+    private function checkIfMVP($match_stats)
+    {
+        if ($match_stats['mvp'] == $this->player->name()) {
+            $this->mvp += 1;
+        }
+    }
+
+    public function id() : String
+    {
+        return $this->id;
     }
 
     public function save()
