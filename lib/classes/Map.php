@@ -46,7 +46,7 @@ class Map
         return $this->name;
     }
 
-    private function save()
+    public function save()
     {
         $sql = "INSERT INTO map (MapID, MapName) VALUES  (?, ?)";
         Database::execute($sql, array($this->id, $this->name));
