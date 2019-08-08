@@ -12,6 +12,9 @@ class Player
     public static function createPlayerFromNameAndTime(String $name, $time) : Player
     {
         $idAtTime = MojangApi::NameToUUUIDAtDateTime($name, $time);
+        if ($idAtTime == null) {
+            $idAtTime = uniqid();
+        }
         return new Player($idAtTime, $name);
     }
 
