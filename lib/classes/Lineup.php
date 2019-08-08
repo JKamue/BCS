@@ -29,7 +29,6 @@ class Lineup
         $this->member3 = $member3;
         $this->member4 = $member4;
         $this->id = $this->calcId();
-
     }
 
     private function calcId() : String
@@ -43,6 +42,11 @@ class Lineup
         );
     }
 
+    public function id() : String
+    {
+        return $this->id;
+    }
+
     public function save()
     {
         $sql = "SELECT ClanUUID FROM lineup WHERE LineupID = ?";
@@ -50,7 +54,7 @@ class Lineup
 
         if ($count != 1) {
             $sql = "INSERT INTO lineup (LineupID, ClanUUID, Player1UUID, Player2UUID, Player3UUID, Player4UUID) VALUES (?, ?, ?, ?, ?, ?)";
-            Database::execute($sql, array($this->id, $this->clan, $this->member1, $this->member2, $this->member3, $this->member4));
+            Database::execute($sql, array($this->id, $this->clan->id(), $this->member1->id(), $this->member2->id(), $this->member3->id(), $this->member4->id()));
         }
     }
 }
