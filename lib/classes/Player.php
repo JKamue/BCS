@@ -3,22 +3,27 @@
 
 class Player
 {
-    public function createPlayerFromID(String $id) : Player
+    public static function createPlayerFromID(String $id) : Player
     {
         $name = MojangApi::UUIDToName($id);
         return new Player($id, $name);
     }
 
-    public function createPlayerFromNameAndTime(String $name, $time) : Player
+    public static function createPlayerFromNameAndTime(String $name, $time) : Player
     {
         $idAtTime = MojangApi::NameToUUUIDAtDateTime($name, $time);
         return new Player($idAtTime, $name);
     }
 
-    public function createPlayerFromName(String $name) : Player
+    public static function createPlayerFromName(String $name) : Player
     {
         $id_guess = NameMcApi::oldNameToUUID($name);
         return new Player($id_guess, $name);
+    }
+
+    public static function createFromArray(Array $arr) : Player
+    {
+        return new Player($arr['id'], $arr['name']);
     }
 
     private $id;
