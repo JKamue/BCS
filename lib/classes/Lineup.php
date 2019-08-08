@@ -17,7 +17,7 @@ class Lineup
 
     public static function create(Clan $clan, Member $member1, Member $member2, Member $member3, Member $member4) : Lineup
     {
-
+        return new Lineup($clan, $member1, $member2, $member3, $member4);
     }
 
     private function __construct(Clan $clan, Member $member1, Member $member2, Member $member3, Member $member4)
