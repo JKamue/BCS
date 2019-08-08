@@ -8,11 +8,6 @@ class Enemy
         return new Enemy($uuid, $tag, $name);
     }
 
-    public static function getEnemyFromDatabase(): Enemy
-    {
-        // Todo implement
-    }
-
     private $uuid;
     private $tag;
     private $name;
@@ -26,6 +21,17 @@ class Enemy
 
     public function save()
     {
-        // Todo Implement
+        $sql = "SELECT ClanName FROM enemy WHERE EnemyUUID = ?";
+        $stm = Database::execute($sql, array($this->uuid));
+
+        if ($stm->rowCount() == 1) {
+            if ($stm->fetchAll()[0]['ClanName'] != $this->name) {
+                $sql = "UPDATE enemy SET ClanName = ?, ClanTag = ? WHERE EnemyUUID = ?";
+                Database::execute($sql, array($this->name, $this->tag, $this->uuid));
+            }
+        } else {
+            $sql = "INSERT INTO enemy (EnemyUUID, ClanTag, ClanName) VALUES (?, ?, ?)";
+            Database::execute($sql, array($this->uuid, $this->tag, $this->name));
+        }
     }
 }
