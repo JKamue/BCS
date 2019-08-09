@@ -8,9 +8,12 @@ class Cw
     private $lineup;
     private $actions;
     /** @var $clans Clan[] */
-    private $clans;
+    private $clans = array();
+    private $givenClans;
     /** @var $clans Match[] */
-    private $matches;
+    private $matches = array();
+
+    private $clanWasSet = array();
 
     public static function getMatch(Array $matchinfo, Array $clans = array()) : Cw
     {
@@ -26,7 +29,7 @@ class Cw
         $this->stats = $stats;
         $this->lineup = $lineup;
         $this->actions = $actions;
-        $this->clans = $clans;
+        $this->givenClans = $clans;
     }
 
     private function api() : Array
@@ -41,20 +44,20 @@ class Cw
         $options_inv = array("loser", "winner");
 
         /** @var $clans Clan[] */
-        $clans = $this->getClanlist($options);
+        $this->getClanlist($options);
 
         $map = Map::getOrCreate($this->info['map']);
 
         foreach ($options as $key => $option) {
-            $clan = $clans[$option];
-            $enemy = $clans[$options_inv[$key]]->toEnemy();
+            $clan = $this->clans[$option];
+            $enemy = $this->clans[$options_inv[$key]]->toEnemy();
             $stat = $option === "winner" ? true : false;
 
             if ($clan->isInBCs())
             {
                 // TODO also check if CW is considered old
                 $bothNoBCS = false;
-                $match = Match::addGame($this->api(), $clan, $enemy, $map, $stat);
+                $match = Match::addGame($this->api(), $clan, $enemy, $map, $stat, $this->clanWasSet);
                 $this->matches[$option] = $match;
             }
         }
@@ -65,7 +68,7 @@ class Cw
         }
     }
 
-    private function getClanlist(Array $options) : Array
+    private function getClanlist(Array $options)
     {
         /** @var $clans Clan[] */
         $clans = array();
@@ -73,19 +76,21 @@ class Cw
             $clan = $this->getClan($this->info[$option]);
             $clans[$option] = $clan;
         }
-        return $clans;
+        $this->clans = $clans;
     }
 
     private function getClan($name) : Clan
     {
         // Check if clan was sent in parameters
-        foreach ($this->clans as &$clan) {
+        foreach ($this->givenClans  as &$clan) {
             if ($clan->name() == $name) {
+                $this->clanWasSet[$name] = true;
                 return $clan;
             }
         }
 
         // Get Clan from Gomme and or DB
+        $this->clanWasSet[$name] = false;
         return Clan::getOrCreateClanByName($name);
     }
 

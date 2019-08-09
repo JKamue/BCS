@@ -28,12 +28,14 @@ class Match
     private $members = array();
     private $lineup;
 
-    public static function addGame($apidata, Clan $clan, Enemy $enemy, Map $map, Bool $winner) : Match
+    private $set;
+
+    public static function addGame($apidata, Clan $clan, Enemy $enemy, Map $map, Bool $winner, Array $clanSet) : Match
     {
-        return new Match($apidata, $clan, $enemy, $map, $winner);
+        return new Match($apidata, $clan, $enemy, $map, $winner, $clanSet);
     }
 
-    private function __construct($apidata, Clan $clan, Enemy $enemy, Map $map, Bool $winner)
+    private function __construct($apidata, Clan $clan, Enemy $enemy, Map $map, Bool $winner, Array $clanSet)
     {
         $this->match_overview = $apidata[0];
         $this->match_stats = $apidata[1];
@@ -50,7 +52,8 @@ class Match
         $this->lineup = Lineup::createFromArray($this->clan, $this->members);
         $this->setMatchStats();
         $this->clan->setLastMatch($this->matchid, $this->timeAsString());
-        // Feed Members
+
+        $this->set = $clanSet;
     }
 
     private function setMatchStats()
@@ -132,7 +135,12 @@ class Match
         $this->saveMembers();
         $this->map->save();
         $this->enemy->save();
+
+        if ($this->set[$this->clan->name()] == false) {
+            $this->clan->setActivePlayers();
+        }
         $this->clan->save();
+
         $this->lineup->save();
         $this->saveGame();
     }

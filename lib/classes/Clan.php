@@ -11,6 +11,10 @@ class Clan
      */
     public static function getOrCreateClanByName(String $name) : Clan
     {
+        $stats = GommeApi::fetchClanStats($name);
+        if ($stats == null || $stats == false) {
+            return new Clan("deleted","DeletedClan", "DEL", "0000-00-00 00:00:00", "0000-00-00 00:00:00", "0000-00-00 00:00:00", "no-matches", false);
+        }
         return self::getOrCreateClanByClanStats(GommeApi::fetchClanStats($name));
     }
 
@@ -135,6 +139,23 @@ class Clan
     {
         $this->match = $matchid;
         $this->active = $time;
+    }
+
+    public function setActivePlayers()
+    {
+        $players = GommeApi::fetchClanMembers($this->name);
+
+        $sql = "UPDATE member SET Active = 0 WHERE ClanUUID = ?";
+        Database::execute($sql, array($this->id));
+
+
+        $all_player = array_merge($players['leader'], $players['mods'], $players['member']);
+        $uuid_name_pairs = MojangApi::namesToUUID($all_player);
+
+        $sql = "UPDATE member SET Active = 1 WHERE PlayerID = ?";
+        foreach ($uuid_name_pairs as &$pair) {
+            Database::execute($sql, array(md5($this->id . $pair['id'])));
+        }
     }
 
     public function save()
