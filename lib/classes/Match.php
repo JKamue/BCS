@@ -49,6 +49,7 @@ class Match
         $this->generateMemberList();
         $this->lineup = Lineup::createFromArray($this->clan, $this->members);
         $this->setMatchStats();
+        $this->clan->setLastMatch($this->matchid, $this->timeAsString());
         // Feed Members
     }
 
@@ -127,7 +128,6 @@ class Match
     }
 
     public function save() {
-        // TODO set clan last match and playtime
         $this->savePlayers();
         $this->saveMembers();
         $this->map->save();
