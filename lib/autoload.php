@@ -14,5 +14,6 @@ spl_autoload_register(function ($class_name) {
         include ROOT . "/lib/data/" . $class_name . '.php';
     }
 });
-
-$Session = new Session();
+if (php_sapi_name() !== 'cli') {
+    $Session = new Session();
+}
