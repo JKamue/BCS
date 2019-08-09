@@ -54,7 +54,7 @@ class Clan
     public static function clanIDExists(String $id) : Bool
     {
         $name = GommeApi::convertUUIDtoName($id);
-        return self::checkIfClanNameExists($name);
+        return self::clanNameExists($name);
     }
 
     /**
@@ -131,15 +131,14 @@ class Clan
         return $this->name;
     }
 
-    public function setLastMatch(Match $game) : Match
+    public function setLastMatch($matchid, $time)
     {
-        $this->match = $game->matchid();
-        $this->active = $game->timeAsString();
+        $this->match = $matchid;
+        $this->active = $time;
     }
 
     public function save()
     {
-        // TODO set activity
         $this->updated = date('Y-m-d H:i:s');
         $sql = "SELECT ClanName FROM clan WHERE ClanUUID = ?";
         $exists = Database::count($sql, array($this->id));
