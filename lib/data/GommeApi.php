@@ -3,6 +3,13 @@
 class GommeApi
 {
 
+    private static function convertDateTime($wrong) {
+        $parts = explode(" ", $wrong);
+        $piece = explode(".", $parts[0]);
+        $right = $piece[2] . "-" . $piece[1] . "-" . $piece[0] . " " . $parts[1];
+        return $right;
+    }
+
     //Convert a Clan UUID to a Name
     public static function convertUUIDtoName($clan_uuid) {
         $a = 10;
@@ -167,7 +174,7 @@ class GommeApi
                 //Get Datetime
                 $date = stringIsolateBetween($part, "style=\"padding: 14px;\">", "</td> <td class");
                 $time = stringIsolateBetween($part, "</td> <td class=\"col-md-1\" style=\"padding: 14px;\">", "</td> <td st");
-                $tmp['datetime'] = $date . " " . $time;
+                $tmp['datetime'] = self::convertDateTime($date . " " . $time);
 
                 //Get Player
                 $player = stringIsolateBetween($part, "<span", "an>");
@@ -241,7 +248,7 @@ class GommeApi
             //Get datetime
             $date = stringIsolateBetween($cw,"date\">","</span> <span");
             $time = stringIsolateBetween($cw,"time\">","</span> </td>");
-            $tmp['datetime'] = $date." ".$time;
+            $tmp['datetime'] = self::convertDateTime($date." ".$time);
 
             //Get Map
             $cw = str_replace($date."</span","",$cw);
@@ -322,7 +329,7 @@ class GommeApi
         $table = stringIsolateBetween($other,"<table class=\"table mapInf\">","</a> </td> </tr> </table>");
         $parts = explode("<tr>",$table);
 
-        $return['datetime'] = stringIsolateBetween($parts[1],"Spielstart</td> <td>","</td> </tr>");
+        $return['datetime'] = "20" . self::convertDateTime(stringIsolateBetween($parts[1],"Spielstart</td> <td>","</td> </tr>"));
         $return['duration'] = stringIsolateBetween($parts[2],"Dauer</td> <td>","</td> </tr>");
         $return['elo'] = stringIsolateBetween($parts[3],"verloren)</td> <td>","</td> </tr>");
         $return['replay'] = stringIsolateBetween($parts[5],"Replay-ID</td> <td> "," </td> </tr>");
@@ -473,7 +480,7 @@ class GommeApi
             //Get datetime
             $date = stringIsolateBetween($cw,"date\">","</span> <span");
             $time = stringIsolateBetween($cw,"time\">","</span> </td>");
-            $tmp['datetime'] = $date." ".$time;
+            $tmp['datetime'] = self::convertDateTime($date." ".$time);
 
             //Get Map
             $cw = str_replace($date."</span","",$cw);
@@ -488,4 +495,5 @@ class GommeApi
 
         return $return;
     }
+
 }
