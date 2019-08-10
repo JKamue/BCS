@@ -67,7 +67,7 @@ function getStats() {
         FROM   game
         ) AS Games
     FROM    dual";
-    return Database::select($sql);
+    return Database::select($sql, array());
 }
 
 function getSupport() {

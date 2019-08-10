@@ -12,6 +12,7 @@ class Scanner
         $clans = array($clan);
         $i = 0;
 
+        $games = array_reverse($games);
         foreach ($games as &$game) {
             $i++;
             if ($debug) {self::progressBar($i, 100, $game['matchid']);}
@@ -26,6 +27,8 @@ class Scanner
     public static function scanLatestGames($debug = false) {
         $games = GommeApi::fetchLastCws(100);
         $i = 0;
+
+        $games = array_reverse($games);
         foreach ($games as &$game) {
             $i++;
             if ($debug) {self::progressBar($i, 100, $game['matchid']);}
@@ -37,8 +40,13 @@ class Scanner
     }
 
     public static function progressBar($done, $total, $matchid) {
-        $perc = floor(($done / $total) * 100);
-        $write = sprintf("$perc%% - $done/$total currently $matchid", "", "");
-        fwrite(STDERR, $write);
+        if (php_sapi_name() !== 'cli') {
+            echo "currently $matchid<br>\n";
+            flush();
+        } else {
+            $perc = floor(($done / $total) * 100);
+            $write = sprintf("$perc%% - $done/$total currently $matchid", "", "");
+            fwrite(STDERR, $write);
+        }
     }
 }
