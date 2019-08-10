@@ -14,9 +14,7 @@ if (!$Session->isLogedIn()) {
         showForm();
     } else {
         // Check if user exists
-        $pdo = Database::getConnection("main");
-        $statement = $pdo->prepare("SELECT password, rank FROM team WHERE name = ?");
-        $statement->execute(array($_POST['username']));
+        $statement = Database::execute("SELECT password, rank FROM team WHERE name = ?", array($_POST['username']));
 
         if ($statement->rowCount() != 1) {
             showForm();
