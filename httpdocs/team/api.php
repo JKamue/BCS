@@ -7,7 +7,7 @@ if (isset($_GET['addClan'])) {
     ignore_user_abort(true);
     ini_set('max_execution_time', 600);
     try {
-        Scanner::scanClan($_GET['addClan']);
+        Scanner::scanClan($_GET['addClan'], true);
     } catch (Exception $e) {
         http_response_code(500);
         echo $e->getMessage();
