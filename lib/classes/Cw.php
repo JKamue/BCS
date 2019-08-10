@@ -43,7 +43,6 @@ class Cw
         $sql = "SELECT LastActive, LastMatch FROM clan WHERE ClanUUID = ?";
         $res = Database::selectFirst($sql, array($clan->id()));
         if ($res['LastMatch'] >= $this->info['datetime']) {
-            echo " Detected old cw";
             return false;
         } else {
             return true;
