@@ -16,16 +16,29 @@ class Scanner
             $i++;
             if ($debug) {self::progressBar($i, 100, $game['matchid']);}
             $cw = Cw::getMatch($game, $clans);
-            $cw->compute();
+            $cw->compute($debug);
             $cw->save();
         }
 
         $clan->setActivePlayers();
     }
 
-    function progressBar($done, $total, $matchid) {
+    public static function scanLatestGames($debug = false) {
+        $games = GommeApi::fetchLastCws(100);
+        $i = 0;
+        foreach ($games as &$game) {
+            $i++;
+            if ($debug) {self::progressBar($i, 100, $game['matchid']);}
+            $cw = Cw::getMatch($game);
+            $cw->compute($debug);
+            $cw->save();
+            echo PHP_EOL;
+        }
+    }
+
+    public static function progressBar($done, $total, $matchid) {
         $perc = floor(($done / $total) * 100);
-        $write = sprintf("$perc%% - $done/$total currently $matchid" . PHP_EOL, "", "");
+        $write = sprintf("$perc%% - $done/$total currently $matchid", "", "");
         fwrite(STDERR, $write);
     }
 }
