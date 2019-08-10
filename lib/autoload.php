@@ -16,4 +16,6 @@ spl_autoload_register(function ($class_name) {
 });
 if (php_sapi_name() !== 'cli') {
     $Session = new Session();
+} else {
+    $Session = null;
 }

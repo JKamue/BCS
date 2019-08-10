@@ -5,9 +5,13 @@ include ROOT . "/src/team/api.php";
 
 if (isset($_GET['addClan'])) {
     ignore_user_abort(true);
-    $response = addClan($_GET['addClan']);
-    http_response_code($response['code']);
-    echo $response['mes'];
+    ini_set('max_execution_time', 600);
+    try {
+        Scanner::scanClan($_GET['addClan']);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo $e->getMessage();
+    }
 } else if (isset($_GET['showClans'])) {
     echo json_encode(listClans());
 } else if (isset($_GET['BCSInformation'])) {
