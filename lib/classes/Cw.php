@@ -9,6 +9,7 @@ class Cw
     private $actions;
     /** @var $clans Clan[] */
     private $clans = array();
+    /** @var $clans Clan[] */
     private $givenClans;
     /** @var $clans Match[] */
     private $matches = array();
@@ -37,7 +38,19 @@ class Cw
         return array($this->info, $this->stats, $this->lineup, $this->actions);
     }
 
-    public function compute()
+    private function cwNotOld(Clan $clan)
+    {
+        $sql = "SELECT LastActive, LastMatch FROM clan WHERE ClanUUID = ?";
+        $res = Database::selectFirst($sql, array($clan->id()));
+        if ($res['LastMatch'] >= $this->info['datetime']) {
+            echo " Detected old cw";
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function compute($debug = false)
     {
         $bothNoBCS = true;
         $options = array("winner", "loser");
@@ -55,15 +68,20 @@ class Cw
 
             if ($clan->isInBCs())
             {
-                // TODO also check if CW is considered old
                 $bothNoBCS = false;
-                $match = Match::addGame($this->api(), $clan, $enemy, $map, $stat, $this->clanWasSet);
-                $this->matches[$option] = $match;
+                if ($debug)
+                    echo " " . $clan->name() . " in BCS";
+
+                if ($this->cwNotOld($clan)) {
+                    $match = Match::addGame($this->api(), $clan, $enemy, $map, $stat, $this->clanWasSet);
+                    $this->matches[$option] = $match;
+                }
             }
         }
 
         // Update both clans as enemys in BCS so api resources are not wasted
         if ($bothNoBCS) {
+            echo " Both teams not in BCS";
             $this->saveBothEnemies();
         }
     }
