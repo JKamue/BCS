@@ -148,7 +148,7 @@ class Clan
         $sql = "UPDATE member SET Active = 0 WHERE ClanUUID = ?";
         Database::execute($sql, array($this->id));
 
-
+        // TODO CHeck if mods, leader and member really exists
         $all_player = array_merge($players['leader'], $players['mods'], $players['member']);
         $uuid_name_pairs = MojangApi::namesToUUID($all_player);
 
