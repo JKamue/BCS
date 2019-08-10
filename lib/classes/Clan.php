@@ -41,7 +41,7 @@ class Clan
         } else {
             $added = $now;
             $updated = $now;
-            $active = $now;
+            $active = "0000-00-00 00:00:00";
             $match = "notplayed";
             $bcs = false;
         }
