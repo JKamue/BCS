@@ -34,4 +34,6 @@ if (isset($_GET['addClan'])) {
     echo setRank($_GET['setRank'],$_GET['name']);
 } else if (isset($_GET['delClan'])) {
     echo json_encode(delClan($_GET['delClan']));
+} else if (isset($_GET['checkClan'])) {
+    // TODO implement
 }
