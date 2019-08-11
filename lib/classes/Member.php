@@ -122,9 +122,10 @@ class Member
                   Killed = Killed + ?,
                   Quits = Quits + ?,
                   Died = Died + ?,
-                  BAC = BAC + ?
+                  BAC = BAC + ?,
+                  Betten = Betten + ?
                 WHERE PlayerID = ?";
-            $data = array($this->active, $this->mvp, $this->kills, $this->killed, $this->quits, $this->died, $this->bac, $this->id);
+            $data = array($this->active, $this->mvp, $this->kills, $this->killed, $this->quits, $this->died, $this->bac, $this->beds, $this->id);
         } else {
             $this->player->save();
 
