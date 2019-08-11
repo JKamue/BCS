@@ -277,6 +277,11 @@ class GommeApi
             return false;
         }
 
+        // check if It is a multi round match
+        if (strpos($html, "<h2 class=\"text-center\">Best of") !== false) {
+            return false;
+        }
+
         $clans = stringIsolateBetween($html,"<h1 class=\"text-center teams-title\">","</h1>");
         $other = str_replace($clans,"",$html);
         $clans = explode("<span class=\"vsLabel\">vs.</span>",$clans);
