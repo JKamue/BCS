@@ -1,7 +1,28 @@
 <?php
 
+interface iGameCollector
+{
+    public function compute();
+    public function save();
+}
 
-class Cw
+class InvalidCw implements iGameCollector
+{
+    public function __construct()
+    {
+
+    }
+
+    public function compute() {
+
+    }
+
+    public function save() {
+
+    }
+}
+
+class Cw implements iGameCollector
 {
     private $info;
     private $stats;
@@ -16,9 +37,12 @@ class Cw
 
     private $clanWasSet = array();
 
-    public static function getMatch(Array $matchinfo, Array $clans = array()) : Cw
+    public static function getMatch(Array $matchinfo, Array $clans = array()) : iGameCollector
     {
         $stats = GommeApi::fetchCwStats($matchinfo['matchid']);
+        if ($stats == false) {
+            return new InvalidCw();
+        }
         $lineup = GommeApi::fetchCwPlayers($matchinfo['matchid']);
         $actions = GommeApi::fetchCwActions($matchinfo['matchid']);
         return new Cw($matchinfo, $stats, $lineup, $actions, $clans);
