@@ -8,14 +8,15 @@ class Session
         // Start Session
         $this->startSession();
         // Validate session if its already existing
-        if ($this->isActive()) {
+        if (!$this->isActive() || isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800)) {
+            $this->createSession();
+        } else {
             if (!$this->isValid()) {
                 $this->destroy();
                 $this->createSession();
             }
-        } else {
-            $this->createSession();
         }
+        $_SESSION['LAST_ACTIVITY'] = time();
     }
 
     private function startSession()

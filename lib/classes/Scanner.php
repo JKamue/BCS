@@ -17,7 +17,7 @@ class Scanner
             $i++;
             if ($debug) {self::progressBar($i, 100, $game['matchid']);}
             $cw = Cw::getMatch($game, $clans);
-            $cw->compute($debug);
+            $cw->compute();
             $cw->save();
         }
 
@@ -33,7 +33,7 @@ class Scanner
             $i++;
             if ($debug) {self::progressBar($i, 100, $game['matchid']);}
             $cw = Cw::getMatch($game);
-            $cw->compute($debug);
+            $cw->compute();
             $cw->save();
             echo PHP_EOL;
         }
@@ -45,7 +45,7 @@ class Scanner
             flush();
         } else {
             $perc = floor(($done / $total) * 100);
-            $write = sprintf("$perc%% - $done/$total currently $matchid", "", "");
+            $write = sprintf("$perc%% - $done/$total currently $matchid" . PHP_EOL, "", "");
             fwrite(STDERR, $write);
         }
     }

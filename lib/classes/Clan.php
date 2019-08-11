@@ -148,16 +148,15 @@ class Clan
         $sql = "UPDATE member SET Active = 0 WHERE ClanUUID = ?";
         Database::execute($sql, array($this->id));
 
-        if (isset($players['leader'])) {
+        if (!isset($players['leader'])) {
             $players['leader'] = array();
         }
-        if (isset($players['mods'])) {
+        if (!isset($players['mods'])) {
             $players['mods'] = array();
         }
-        if (isset($players['member'])) {
+        if (!isset($players['member'])) {
             $players['member'] = array();
         }
-
 
         $all_player = array_merge($players['leader'], $players['mods'], $players['member']);
         $uuid_name_pairs = MojangApi::namesToUUID($all_player);

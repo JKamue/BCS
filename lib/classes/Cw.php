@@ -49,7 +49,7 @@ class Cw
         }
     }
 
-    public function compute($debug = false)
+    public function compute()
     {
         $bothNoBCS = true;
         $options = array("winner", "loser");
@@ -68,8 +68,6 @@ class Cw
             if ($clan->isInBCs())
             {
                 $bothNoBCS = false;
-                if ($debug)
-                    echo " " . $clan->name() . " in BCS";
 
                 if ($this->cwNotOld($clan)) {
                     $match = Match::addGame($this->api(), $clan, $enemy, $map, $stat, $this->clanWasSet);
@@ -80,7 +78,6 @@ class Cw
 
         // Update both clans as enemys in BCS so api resources are not wasted
         if ($bothNoBCS) {
-            echo " Both teams not in BCS";
             $this->saveBothEnemies();
         }
     }
