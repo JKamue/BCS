@@ -76,7 +76,7 @@ class Clan
     }
 
     /** Checks if a clan already Exists in BCS */
-    public static function idInBCS(String $id) : Bool
+    public static function idInBCS(String $id)
     {
         $sql = "SELECT ClanName FROM clan WHERE ClanUUID = ?";
         $count = Database::count($sql, array($id));
@@ -87,14 +87,15 @@ class Clan
     }
 
     /** Checks if a clan already Exists in BCS */
-    public static function nameInBCS(String $name) : Bool
+    public static function nameInBCS(String $name)
     {
-        $sql = "SELECT ClanName FROM clan WHERE ClanName = ?";
-        $count = Database::count($sql, array($name));
-        if ($count === 0) {
+        $sql = "SELECT ClanName, ClanUUID FROM clan WHERE ClanName = ?";
+        $stm = Database::execute($sql, array($name));
+        if ($stm->rowCount() === 0) {
             return false;
         }
-        return true;
+        $data = $stm->fetchAll()[0];
+        return $data['ClanUUID'];
     }
 
     private $id;
