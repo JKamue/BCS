@@ -147,6 +147,9 @@ class Match
 
     private function saveGame() {
         $sql = "INSERT INTO game (GameID, Win, Elo, GameTime, BACGame, MapID, LineupID, EnemyUUID, ClanUUID, MatchID) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if (!$this->winner) {
+            $this->elo *= -1;
+        }
         $data = array($this->id, $this->win, $this->elo, $this->gametime, $this->bac, $this->map->id(),
             $this->lineup->id(), $this->enemy->id(), $this->clan->id(), $this->matchid);
         Database::execute($sql,$data);
