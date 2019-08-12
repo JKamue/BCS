@@ -21,8 +21,8 @@ function get_contents($url) {
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
     curl_setopt($ch, CURLOPT_COOKIESESSION, true);
 
-    curl_setopt($ch, CURLOPT_COOKIEFILE, 'cookies.txt');
-    curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookies.txt');
+    curl_setopt($ch, CURLOPT_COOKIEFILE, ROOT . 'data/tmp/cookies.txt');
+    curl_setopt($ch, CURLOPT_COOKIEJAR, ROOT . 'data/tmp/cookies.txt');
     curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
     $result = curl_exec($ch);
     curl_close($ch);
