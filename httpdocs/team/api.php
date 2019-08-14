@@ -35,5 +35,5 @@ if (isset($_GET['addClan'])) {
 } else if (isset($_GET['delClan'])) {
     echo json_encode(delClan($_GET['delClan']));
 } else if (isset($_GET['checkClan'])) {
-    // TODO implement
+    echo json_encode(Clan::updateClan($_GET['checkClan']));
 }

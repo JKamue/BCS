@@ -3,6 +3,39 @@
 
 class Clan
 {
+    public static function updateClan($name) : Array
+    {
+        $return = array();
+
+        $clanStats = GommeApi::fetchClanStats($name);
+
+        // Überprüfen ob Clan existiert
+        if ($clanStats == false) {
+            array_push($return, "Clan existiert nicht");
+            return $return;
+        }
+
+        $clan = self::getOrCreateClanByClanStats($clanStats);
+
+        // Überprüfen ob Clan in bcs
+        if (!$clan->isInBCs()) {
+            array_push($return, "Clan existiert nicht in BCS");
+            return $return;
+        }
+
+        $clan->save();
+        array_push($return, "Clanname und Tag wurden aktualisiert");
+
+
+        $clan->setActivePlayers();
+        array_push($return, "Spielernamen und Aktivitätsstatus wurden aktualisiert");
+
+        Scanner::scanExistingClan($clan);
+        array_push($return, "Letzte Clan CWs wurden hinzugefügt");
+
+        return $return;
+    }
+
     /**
      * Reads Clan from DB or Creates a new one if no Clan exists
      *
@@ -136,6 +169,11 @@ class Clan
         return $this->name;
     }
 
+    public function lastMatchid() : String
+    {
+        return $this->match;
+    }
+
     public function setLastMatch($matchid, $time)
     {
         $this->match = $matchid;
@@ -162,9 +200,11 @@ class Clan
         $all_player = array_merge($players['leader'], $players['mods'], $players['member']);
         $uuid_name_pairs = MojangApi::namesToUUID($all_player);
 
-        $sql = "UPDATE member SET Active = 1 WHERE PlayerID = ?";
+        $updateMember = "UPDATE member SET Active = 1 WHERE PlayerID = ?";
+        $updatePlayer = "UPDATE player SET name = ? WHERE UUID = ?";
         foreach ($uuid_name_pairs as &$pair) {
-            Database::execute($sql, array(md5($this->id . $pair['id'])));
+            Database::execute($updateMember, array(md5($this->id . $pair['id'])));
+            Database::execute($updatePlayer, array($pair['name'], $pair['id']));
         }
     }
 
