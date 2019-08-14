@@ -24,8 +24,8 @@ $ranks = array("","Admin","Mod","Supporter");
         <span onclick="showClans()">BCS-Clans</span>
         <span onclick="showAddClan()">Neuen Clan hinzufügen</span>
         <span onclick="showSupports()">Support</span>
-        <?= ($rank == 1 ? "<span onclick=\"deleteClan()\">Clan löschen</span>" : ""); ?>
-        <?= ($rank < 3 ? "<span onclick=\"showTeam()\">Team</span>" : ""); ?>
+        <?= ($rank < 3 ? "<span onclick=\"deleteClan()\">Clan löschen</span>" : ""); ?>
+        <?= ($rank == 1 ? "<span onclick=\"showTeam()\">Team</span>" : ""); ?>
     </div>
 
     <div class="main">
