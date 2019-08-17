@@ -5,6 +5,7 @@ class Scanner
 {
     public static function scanClan($clanname, $debug = false)
     {
+        set_time_limit(500);
         $clan = Clan::getOrCreateClanByName($clanname);
         $clan->save();
         $clan = Clan::getOrCreateClanByName($clanname);
@@ -27,16 +28,15 @@ class Scanner
 
     public static function scanExistingClan(Clan $clan)
     {
+        set_time_limit(500);
         $games = GommeApi::fetchClanCws($clan->id(),100, "bedwars", "true");
         $clans = array($clan);
         $i = 0;
 
         $lastMatchid = $clan->lastMatchid();
 
+        $games = array_reverse($games);
         foreach ($games as &$game) {
-            if ($lastMatchid == $game['matchid']) {
-                break;
-            }
 
             $i++;
             $cw = Cw::getMatch($game, $clans);
@@ -47,7 +47,9 @@ class Scanner
         $clan->setActivePlayers();
     }
 
-    public static function scanLatestGames($debug = false) {
+    public static function scanLatestGames($debug = false)
+    {
+        set_time_limit(500);
         $games = GommeApi::fetchLastCws(100);
         $i = 0;
 
