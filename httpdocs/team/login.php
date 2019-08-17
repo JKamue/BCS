@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 function showForm() {
     echo file_get_contents("login.html");
@@ -7,7 +8,7 @@ function showForm() {
 
 require_once "../../lib/autoload.php";
 
-if (!$Session->isLogedIn()) {
+if (!isset($_SESSION['logedin'])) {
     // Look if Login Process ongoing
     if (!isset($_POST['username']) and !isset($_POST['password'])) {
         // Send User login form
@@ -27,7 +28,9 @@ if (!$Session->isLogedIn()) {
         }
 
         // Set Session
-        $Session->login($_POST['username'], $data['rank']);
+        $_SESSION['logedin'] = 1;
+        $_SESSION['name'] = $_POST['username'];
+        $_SESSION['rank'] = $data['rank'];
     }
 }
 

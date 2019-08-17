@@ -3,10 +3,11 @@
 include_once "../../lib/autoload.php";
 include ROOT . "/src/team/api.php";
 
-/** @var Session $Session */
-if(!$Session->isLogedIn()) {
+session_start();
+if($_SESSION['logedin'] != 1) {
     exit;
 }
+session_write_close();
 
 if (isset($_GET['addClan'])) {
     ignore_user_abort(true);
