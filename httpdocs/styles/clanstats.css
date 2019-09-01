@@ -1,0 +1,99 @@
+@media (max-width: 1200px) {
+	.first {
+		-webkit-order: -1;
+		order: -1;
+	}
+}
+
+h1 {
+	text-shadow: 1px 1px 20px rgba(255, 255, 255, 1);
+}
+
+.clanname-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.hide-on-tiny{
+	display: none!Important;
+}
+
+@media (min-width: 405px) {
+	.hide-on-tiny{
+		display: inline!Important;
+	}
+}
+
+/* Stats Box Styling */
+
+.stats-box {
+	padding-bottom: 20px;
+}
+
+.stats-box .header {
+	padding-top: 1vh;
+	clip-path: polygon(9% 0, 91% 0, 100% 30%, 100% 100%, 0 100%, 0 30%);
+	background-color: #4ea1d5;
+	width: 100%;
+	text-align : center;
+}
+
+.stats-box .header h2 {
+	margin-bottom:0;
+	color: white
+}
+
+.stats-box .sub {
+	border-bottom: 2px solid #b9881f;
+	padding-top: 5px;
+	padding-bottom: -3px;
+	background-color: #ffb81e;
+	width: 100%;
+	text-align: center;
+}
+
+.stats-box .special-border {
+	border-right: 2px solid #b9881f;
+}
+
+.stats-box .content {
+	width: 100%;
+	background-color: white;
+	padding: 0px;
+	max-height: 50vh;
+	overflow-x: auto;
+	overflow-y: hide;
+}
+
+.stats-box .group {
+	margin-left:auto; 
+	margin-right:auto;
+	align: center;
+}
+
+.stats-box .group td {
+	padding: 10px;
+}
+
+.stats-box .group h5 {
+	display: inline;
+}
+
+.stats-box .group .map {
+	width: 60px;
+	border-radius: 50%;
+}
+
+/* Text Styling */
+.text-bcs {
+	color: #4ea1d5
+}
+
+.text-bac {
+	color: #fec546
+}
+
+.underline {
+	text-decoration: underline;
+}

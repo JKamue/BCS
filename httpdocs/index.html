@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	
+	<!-- Bootstrap-->
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+	<script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	
+	<!-- Stylesheet-->
+	<style>
+		#header-logo {
+			z-index: 1;
+			left: 30%;
+			top: 0px;
+			position: absolute;
+			width: 40%;
+			height:6vh;
+		}
+		
+		.navbar-header {
+			float: left;
+			padding: 15px;
+			text-align: center;
+			width: 100%;
+		}
+		.navbar-brand {float:none;}
+			
+		#centered-logo {
+			background-size: 100%;
+			background-size: cover;
+			background-position: center center;
+			vertical-align: top;
+			background-image: url(img/desert2.png);
+			height: 40vh;
+			margin-top: -1rem;
+			width: 100%;
+			height: 50vh;
+		}
+			
+		.search-container {
+			float: right;
+		}
+		
+	</style>
+	
+	<!-- Meta Tags-->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="BCS oder Better CWBW Stats ist eine Website zur statistischen Auswertung von gespielten CWs.">
+	<meta name="keywords" content="BCS,Stats,Gomme,Minecraft">
+	<meta name="robots" content="index, nofollow">
+	<meta name="language" content="DE">
+	<meta name="generator" content="FreeMetaTagGenerator.com">
+	
+	<title>BCS</title>
+	<link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+</head>
+<body>
+
+<div id="header-logo">
+	<div class="row">
+		<div class="w-100 text-center vcenter">
+			<img width="50vw" alt="bcs logo" src="img/navlogo.png">
+		</div>
+	</div>
+</div>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+				<a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="clanstats.html">Clanstats</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="bewerbung.html">Bewerbung</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Developer</a>
+			</li>
+		</ul>
+	</div>
+	
+	
+	<div class="search-container d-none d-md-block">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Clan und Spieler Suche">
+			<div class="input-group-append">
+				<button class="btn btn-secondary" type="button">
+					<i class="fa fa-search"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+</nav>
+
+<div id="centered-logo">
+	<div style="padding: 5vh" class="h-100 w-100 text-center ">
+		<img class="center-block" style="height: 100%" src="img/logo_leather_small.png" alt="bcs logo"/></div>
+	</div>
+</div>
+
+<div style="margin-top: 2vh" class="container">
+	<div class="row">
+		<div class="col-md-6 col-lg-4 col-xl-3 d-block d-md-none">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Clan und Spieler Suche">
+				<div class="input-group-append">
+				  <button class="btn btn-secondary" type="button">
+					<i class="fa fa-search"></i>
+				  </button>
+				</div>
+			</div>
+			<br>
+		</div>
+		<div class="col-md-12 col-lg-12 col-xl-12 d-none d-md-block">
+			<h2 class="text-center">Über BCS</h2>
+			<p id="about-bcs">BCS ist ein Program, das automatisch die Spiele von registrierten Clans aufzeichnet. Mithilfe dieser Aufzeichnungen können detallierte Statistiken zu Clans erstellt werden, mit denen Clans ihre Spielweise optimieren können.</p>
+		</div>
+		<div class="col-md-6 col-lg-6 col-xl-6 d-none d-sm-block">
+			<h2>Clanbewerbung</h2>
+			<p>Bewerbe deinen Clan bei BCS, damit auch du ein detallierte Auswertung deines Clans erhältst. Gespeichert werden alle CWs, dadurch erhält man Statistiken zu Lineups, Maps, Spielern, Gegnern und der Overall Performance eines Clans.</p>
+			<p><a href="" class="btn btn-success">Clanbewerbung &raquo;</a></p>
+		</div>
+		<div class="col-md-6 col-lg-6 col-xl-6 d-none d-sm-block">
+			<h2>BCS-Team Bewerbung</h2>
+			<p>BCS sucht Personen, die sich in der Clan Community gut auskennen und Clan Bewerbungen bearbeiten. Gleichzeitig wollen wir uns auch immer verbessern, wenn du ein Entwickler mit Verbesserungsideen bist kannst du dich gerne auch bewerben.</p>
+			<p><a href="" class="btn btn-success">Team Bewerbung &raquo;</a></p>
+		</div>
+		<div class="col-md-6 col-lg-6 col-xl-6 d-block d-sm-none text-center">
+			<p><a href="" class="display-4 btn btn-success"><span style="font-size: 5vh">Clanbewerbung &raquo;</span></a></p>
+			<p><a href="" class="display-4 btn btn-success"><span style="font-size: 5vh">Team Bewerbung &raquo;</span></a></p>
+		</div>
+	</div>
+</div>
+
+	<script>
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET","api/api.php?bcsstats", true);
+		xmlhttp.send();
+		
+		xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var data = JSON.parse(this.responseText);
+				document.getElementById("about-bcs").innerHTML += "<br>BCS umfasst derzeit <b>" + data.clans + " Clans</b>, <b>" + data.players + " Spieler</b> und <b>" + data.lineups + " Lineups</b>. BCS hat <b>" + data.games + " Spiele</b> mit einer Spielzeit von <b>" + data.time + " Stunden</b> analysiert";
+			}
+		};
+	</script>
+
+</body>
