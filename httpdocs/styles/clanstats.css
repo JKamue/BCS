@@ -25,10 +25,27 @@ h1 {
 	}
 }
 
+/* mobile jumpbox */
+.jump-box {
+	clip-path: polygon(100% 0, 100% 21%, 85% 57%, 14% 57%, 0 20%, 0 0);
+	padding: 0px;
+	text-align: center;
+	width: 100%;
+	height: 6vh;
+	padding: 0px;
+	display: block
+}
+
+@media (min-width: 992px) {
+	.jump-box {
+		display: none;
+	}
+}
+
 /* Stats Box Styling */
 
 .stats-box {
-	padding-bottom: 20px;
+	padding-bottom: 15px;
 }
 
 .stats-box .header {
@@ -62,8 +79,8 @@ h1 {
 	background-color: white;
 	padding: 0px;
 	max-height: 50vh;
-	overflow-x: auto;
-	overflow-y: hide;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .stats-box .group {
@@ -96,4 +113,14 @@ h1 {
 
 .underline {
 	text-decoration: underline;
+}
+
+.clickable {
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
