@@ -42,7 +42,7 @@
 			background-image: url(img/cw-header.png);
 			margin-top: -1rem;
 			width: 100%;
-			height: 25vh;
+			height: 20vh;
 		}
 			
 		.search-container {
@@ -115,15 +115,25 @@
 	</div>
 </div>
 
-<div style="margin: 0px;margin-top: 2vw;" class="row">
-	<div class="col-md-12 col-lg-6 col-xl-4 stats-box">
+
+<div class="bg-dark jump-box">
+	<h5>
+		<a class="text-white underline clickable" href="#enemy">Gegner</a>
+		<a class="text-white underline clickable" href="#maps">Maps</a>
+		<a class="text-white underline clickable" href="#lineup">Lineup</a>
+		<a class="text-white underline clickable" href="#member">Spieler</a>
+	</h5>
+</div>
+
+<div style="margin: 0px; padding-top: 10px" class="row">
+	<div id="enemy" class="col-md-12 col-lg-6 col-xl-4 stats-box">
 		<div class="header">
 			<h2>Gegner Statistiken</h2>
 		</div>
 		<div class="sub">
-			<h5><span id="enemy-best" onclick="enemySetFilter(this.id)">Beste</span> | 
-			<span id="enemy-worst" onclick="enemySetFilter(this.id)">Schlechteste</span> | 
-			<span id="enemy-most" onclick="enemySetFilter(this.id)">Häufigste</span></h5>
+			<h5><span id="enemy-best" class="clickable" onclick="enemySetFilter(this.id)">Beste</span> | 
+			<span id="enemy-worst" class="clickable" onclick="enemySetFilter(this.id)">Schlechteste</span> | 
+			<span id="enemy-most" class="clickable" onclick="enemySetFilter(this.id)">Häufigste</span></h5>
 		</div>
 		<div class="content">
 			<table id="data-enemies" class="group">
@@ -188,13 +198,13 @@
 		</div>
 		<div class="sub">
 			<h5>
-				<span id="map-best" onclick="mapSetSorter(this.id)">Beste</span> | 
-				<span id="map-worst" onclick="mapSetSorter(this.id)">Schlechteste</span> | 
-				<span id="map-most" onclick="mapSetSorter(this.id)">Häufigste</span>
+				<span id="map-best" class="clickable" onclick="mapSetSorter(this.id)">Beste</span> | 
+				<span id="map-worst" class="clickable" onclick="mapSetSorter(this.id)">Schlechteste</span> | 
+				<span id="map-most" class="clickable" onclick="mapSetSorter(this.id)">Häufigste</span>
 			</h5>
 		</div>
 		<div class="content">
-			<div class="w-90">
+			<div class="w-100">
 				<table id="data-maps" class="group">
 					<tr>
 						<td><img class="map" src="img/maps/farm.jpg"/></td>
@@ -203,31 +213,148 @@
 						<td><h5 class="text-danger">100</h5></td>
 						<td><h5 class="text-secondary">Ø 100</h5></td>
 					</tr>
-					<tr>
-						<td><img class="map" src="img/maps/bordon.jpg"/></td>
-						<td><h5 class="text-bcs hide-on-tiny">Bordon</h5></td>
-						<td><h5 class="text-success">100</h5></td>
-						<td><h5 class="text-danger">100</h5></td>
-						<td><h5 class="text-secondary">Ø 100</h5></td>
-					</tr>
-					<tr>
-						<td><img class="map" src="img/maps/carvo.jpg"/></td>
-						<td><h5 class="text-bcs hide-on-tiny">Carvo</h5></td>
-						<td><h5 class="text-success">100</h5></td>
-						<td><h5 class="text-danger">100</h5></td>
-						<td><h5 class="text-secondary">Ø 100</h5></td>
-					</tr>
-					<tr>
-						<td><img class="map" src="img/maps/helipad.jpg"/></td>
-						<td><h5 class="text-bcs hide-on-tiny">Sandstone</h5></td>
-						<td><h5 class="text-success">100</h5></td>
-						<td><h5 class="text-danger">100</h5></td>
-						<td><h5 class="text-secondary">Ø 100</h5></td>
-					</tr>
 				</table>
 			</div>
 		</div>
 	</div>
-
+</div>
+<div style="margin: 0px;margin-top: 2vw;" class="row">
+	<div id="lineup" class="col-md-12 col-lg-12 col-xl-6 stats-box">
+		<div class="header">
+			<h2>Lineups</h2>
+		</div>
+		<div class="sub">
+			<h5>
+				<span id="player-games" class="clickable" onclick="">Spiele</span> | 
+				<span id="player-winlose" class="clickable" onclick="">Winlose</span> | 
+				<span id="player-beds" class="clickable" onclick="">Betten</span> | 
+				<span id="player-mvp" class="clickable" onclick="">MVP</span>
+			</h5>
+		</div>
+		<div class="content">
+			<br>
+			<div class="row w-105 text-center">
+				<div id="lineup" class="col-md-12 col-lg-6 col-xl-5 stats-box">
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+				</div>
+				<div id="lineup" class="col-md-12 col-lg-6 col-xl-7 stats-box" style="display: flex;justify-content: center;flex-direction: column;">
+					<h5>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-success">100<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-danger">100<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-secondary">100%<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-bac"><img height="25px" src="img/badlion.png"/> 100<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-secondary"><i class="fas fa-stopwatch"></i> 550h<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-secondary">DM: 10<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-info">Elo: 80</span><wbr>
+					</h5>
+				</div>
+			</div>
+			<hr>
+			<div class="row w-105 text-center">
+				<div id="lineup" class="col-md-12 col-lg-6 col-xl-5 stats-box">
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+				</div>
+				<div id="lineup" class="col-md-12 col-lg-6 col-xl-7 stats-box" style="display: flex;justify-content: center;flex-direction: column;">
+					<h5>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-success">100<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-danger">100<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-secondary">100%<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-bac"><img height="25px" src="img/badlion.png"/> 100<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-secondary"><i class="fas fa-stopwatch"></i> 550h<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-secondary">DM: 10<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-info">Elo: 80</span><wbr>
+					</h5>
+				</div>
+			</div>
+			<hr>
+			<div class="row w-105 text-center">
+				<div id="lineup" class="col-md-12 col-lg-6 col-xl-5 stats-box">
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+					<img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/>
+				</div>
+				<div id="lineup" class="col-md-12 col-lg-6 col-xl-7 stats-box" style="display: flex;justify-content: center;flex-direction: column;">
+					<h5>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-success">100<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-danger">100<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-secondary">100%<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-bac"><img height="25px" src="img/badlion.png"/> 100<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-secondary"><i class="fas fa-stopwatch"></i> 550h<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-secondary">DM: 10<span><wbr>
+						<span style="padding-left: 10px; white-space: nowrap" class="text-info">Elo: 80</span><wbr>
+					</h5>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="member" class="col-md-12 col-lg-12 col-xl-6 stats-box">
+		<div class="header">
+			<h2>Clanmitglieder</h2>
+		</div>
+		<div class="sub">
+			<h5>
+				<span id="player-games" class="clickable" onclick="">Spiele</span> | 
+				<span id="player-winlose" class="clickable" onclick="">Winlose</span> | 
+				<span id="player-beds" class="clickable" onclick="">Betten</span> | 
+				<span id="player-mvp" class="clickable" onclick="">MVP</span>
+			</h5>
+		</div>
+		<div class="content">
+			<table id="data-member" class="group">
+				<tr>
+					<td valign="middle"><img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/></td>
+					<td>
+						<h5>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-success">100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-danger">100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-muted"><i class="fas fa-running"></i> 100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-secondary">100%<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-bac"><img height="25px" src="img/badlion.png"/> 100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-bcs"><i class="fas fa-bed"></i> 100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-bcs">MVP 100<span><wbr>
+							
+						</h5>
+					</td>
+				</tr>
+				<tr>
+					<td valign="middle"><img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/></td>
+					<td>
+						<h5>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-success">100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-danger">100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-muted"><i class="fas fa-running"></i>  100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-secondary">100%<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-bac"><img height="25px" src="img/badlion.png"/> 100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-bcs"><i class="fas fa-bed"></i> 100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-bcs">MVP 100<span><wbr>
+							
+						</h5>
+					</td>
+				</tr>
+				<tr>
+					<td valign="middle"><img style="width: 60px" src="https://crafatar.com/avatars/cee6fa01c5c242d3ba1c4ffd7fcdb359?overlay=true"/></td>
+					<td>
+						<h5>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-success">100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-danger">100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-muted"><i class="fas fa-running"></i> 100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-secondary">100%<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-bac"><img height="25px" src="img/badlion.png"/> 100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-bcs"><i class="fas fa-bed"></i> 100<span><wbr>
+							<span style="padding-left: 10px; white-space: nowrap" class="text-bcs">MVP 100<span><wbr>
+							
+						</h5>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 </div>
 

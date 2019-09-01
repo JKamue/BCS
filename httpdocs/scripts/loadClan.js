@@ -7,7 +7,6 @@ var clanname = "CowBuilders";
 if (findGetParameter("clan") !== null) {
 	clanname = findGetParameter("clan");
 }
-getGommeStats(clanname);
 getBCSStats(clanname);
 
 function findGetParameter(parameterName) {
@@ -104,7 +103,12 @@ function getBCSStats(name) {
 			var readyStateCheckInterval = setInterval(function() {
 				if (document.readyState === "complete") {
 					clearInterval(readyStateCheckInterval);
-					loadBcsStats();
+					if (bcsStats.mes === "Clan not in BCS") {
+						getGommeStats("CowBuilders");
+						getBCSStats("CowBuilders");
+					} else {
+						loadBcsStats();
+					}
 				}
 			}, 10);
 		}
