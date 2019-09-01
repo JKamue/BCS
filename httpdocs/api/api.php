@@ -11,4 +11,6 @@ if (isset($_GET['clanname'])) {
         echo json_encode(array("error" => true, "mes" => "Clan not in BCS"));
         http_response_code(404);
     }
+} elseif (isset($_GET['bcsstats'])) {
+    echo json_encode(getBCSStats());
 }
