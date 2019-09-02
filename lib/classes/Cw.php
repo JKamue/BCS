@@ -45,6 +45,7 @@ class Cw implements iGameCollector
         }
         $lineup = GommeApi::fetchCwPlayers($matchinfo['matchid']);
         $actions = GommeApi::fetchCwActions($matchinfo['matchid']);
+        echo "Received valid information for CW " . $matchinfo['matchid']. "<br>";
         return new Cw($matchinfo, $stats, $lineup, $actions, $clans);
     }
 
@@ -92,11 +93,16 @@ class Cw implements iGameCollector
             if ($clan->isInBCs())
             {
                 $bothNoBCS = false;
+                echo $clan->name() . "is in BCS" . "<br>";
 
                 if ($this->cwNotOld($clan)) {
                     $match = Match::addGame($this->api(), $clan, $enemy, $map, $stat, $this->clanWasSet);
                     $this->matches[$option] = $match;
+                } else {
+                    echo $clan->name() . "old CW". "<br>";
                 }
+            } else {
+                echo $clan->name() . "is not in BCS". "<br>";
             }
         }
 

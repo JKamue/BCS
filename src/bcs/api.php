@@ -9,6 +9,7 @@ function getAllClanData($uuid) : Array
     $lineupstats = getLineupStats($uuid);
 
     $allMember = getAllMember($uuid);
+
     foreach ($lineupstats as &$lineup) {
         $active = true;
 
@@ -18,6 +19,7 @@ function getAllClanData($uuid) : Array
             foreach ($allMember as &$member) {
                 if ($member['PlayerID'] == $lineup[$player . "UUID"]) {
                     $lineup[$player] = $member['name'];
+                    $lineup[$player . "UUID"] = $member['uuid'];
                     if ($member['Active'] != true) {
                         $active = false;
                     }
@@ -112,10 +114,34 @@ function getLineupStats($uuid)
 
 function getAllMember($uuid)
 {
-    $allmember = "SELECT member.PlayerID, member.Active, player.name
+    $allmember = "SELECT member.PlayerID, member.Active, player.name, player.UUID as uuid
 FROM member
 JOIN player ON member.UUID = player.UUID
 WHERE ClanUUID = ?";
 
     return Database::select($allmember, array($uuid));
+}
+
+function getBCSStats()
+{
+    // Anzahl an Clans
+    $clanAmountRequest = "SELECT count(ClanUUID) as ClanAmount FROM `clan`";
+    // Anzahl an Spielern
+    $playerAmountRequest = "SELECT count(UUID) as PlayerAmount FROM `player`";
+    // Anzahl matches und count spielzeit
+    $gameStatsRequest = "SELECT count(GameID) as GameAmount, sum(GameTime) as GameTime FROM `game`";
+    // Anzahl Lineups
+    $lineupAmountRequest = "SELECT count(LineupID) as LineupAmount FROM `lineup`";
+
+    $response = array();
+    $response['clans'] = Database::selectFirst($clanAmountRequest,array())['ClanAmount'];
+    $response['players'] = Database::selectFirst($playerAmountRequest,array())['PlayerAmount'];
+
+    $data = Database::selectFirst($gameStatsRequest,array());
+    $response['games'] = $data['GameAmount'];
+    $response['time'] = round($data['GameTime']/60);
+
+    $response['lineups'] = Database::selectFirst($lineupAmountRequest,array())['LineupAmount'];
+
+    return $response;
 }
