@@ -8,6 +8,8 @@ if (findGetParameter("clan") !== null) {
 	clanname = findGetParameter("clan");
 }
 getBCSStats(clanname);
+getGommeStats(clanname);
+
 
 function findGetParameter(parameterName) {
     var result = null,
@@ -62,7 +64,7 @@ function setText(id, text) {
 
 function getGommeStats(name) {
 	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET","https://jkamue.de/bcs/api/api.php?function=clanStats&name=" + name, true);
+	xmlhttp.open("GET","http://www.cwstats.de/api/gommeapi/api.php?function=clanStats&name=" + name, true);
 	xmlhttp.send();
 		
 	xmlhttp.onreadystatechange = function() {
@@ -151,7 +153,176 @@ function loadBcsStats() {
 	
 	// Map Stats
 	mapSetSorter("map-best")
+	
+	// Lineup Stats
+	lineupSetFilter("lineup-games");
+	
+	// Player Stats
+	playerSetSorter("player-games");
 }
+
+
+function playerSetSorter(sorter) {
+	playerFocusSorter(sorter);
+	playerSort(sorter);
+	loadPlayers();
+}
+
+function playerFocusSorter(sorter) {
+	loadId("player-games").classList.remove("underline");
+	loadId("player-winlose").classList.remove("underline");
+	loadId("player-beds").classList.remove("underline");
+	loadId("player-mvp").classList.remove("underline");
+	loadId("player-kd").classList.remove("underline");
+	loadId(sorter).classList.add("underline");
+}
+
+function playerSort(sorter) {
+	if (sorter == "player-winlose") {
+		playerSort("most");
+		bcsStats.member = bcsStats.member.sort(function(a, b) {
+			var arate = getRate(a.games, a.wins);
+			var brate = getRate(b.games, b.wins);
+			return brate - arate
+		});
+	} else if (sorter == "player-beds") {
+		playerSort("most");
+		bcsStats.member = bcsStats.member.sort(function(a, b) {
+			return b.beds - a.beds;
+			return winDiff;
+		});
+	} else if (sorter == "player-mvp") {
+		playerSort("most");
+		bcsStats.member = bcsStats.member.sort(function(a, b) {
+			return b.mvp - a.mvp;
+			return winDiff;
+		});
+	} else if (sorter == "player-kd") {
+		playerSort("most");
+		bcsStats.member = bcsStats.member.sort(function(a, b) {
+			var akd = a.kills / (1*a.quits + 1*a.died + 1*a.killed);
+			var bkd = b.kills / (1*b.quits + 1*b.died + 1*b.killed);
+			return bkd - akd;
+		});
+	} else {
+		bcsStats.member = bcsStats.member.sort(function(a, b) {
+			return b.games - a.games;
+		});
+	}
+}
+
+function loadPlayers() {
+	document.getElementById("member-content").scrollTop = 0;
+	var table = loadId("data-member");
+	table.innerHTML = "";
+	for (var i = 0; i < bcsStats.member.length; i++) {
+		var member = bcsStats.member[i];
+		
+		var row = table.insertRow();
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		
+		var loses = member.games - member.wins;
+		var winlose = Math.round((member.wins / member.games) * 100);
+		var kd = (member.kills / (1* member.quits + 1*  member.died + 1* member.killed)).toFixed(2);
+		if (kd == Infinity) {
+			kd = "&infin;";
+		}
+		
+		cell1.innerHTML = '<img style="width: 60px" src="https://crafatar.com/avatars/' + member.uuid +'?overlay=true"/>';
+		cell1.style.verticalAlign = "middle";
+		
+		cell2.innerHTML = "<h5>\n" +
+							"\t\t\t\t\t\t\t<span class=\"text-with-space text-success\">" + member.wins + "<span><wbr>\n" +
+							"\t\t\t\t\t\t\t<span class=\"text-with-space text-danger\">" + loses + "<span><wbr>\n" +
+							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\">KD " + kd + "<span><wbr>\n" +
+							"\t\t\t\t\t\t\t<span class=\"text-with-space text-muted\"><i class=\"fas fa-running\"></i> " + member.quits + "<span><wbr>\n" +
+							"\t\t\t\t\t\t\t<span class=\"text-with-space text-secondary\">" + winlose + "%<span><wbr>\n" +
+							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bac\"><img height=\"25px\" src=\"img/badlion.png\"/> " + member.bac + "<span><wbr>\n" +
+							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\"><i class=\"fas fa-bed\"></i> " + member.beds + "<span><wbr>\n" +
+							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\">MVP " + member.mvp + "<span><wbr>\n" +
+							"\t\t\t\t\t\t<span class=\"text-with-space text-secondary text-center\">" + member.name + "<span><wbr>\n</h5>";
+	}
+}
+
+
+
+function lineupSetFilter(filter) {
+	lineupFocusFilter(filter);
+	lineupSort(filter);
+	loadLineups();
+}
+
+function lineupFocusFilter(filter) {
+	loadId("lineup-games").classList.remove("underline");
+	loadId("lineup-best").classList.remove("underline");
+	loadId("lineup-worst").classList.remove("underline");
+	loadId(filter).classList.add("underline");
+}
+
+function lineupSort(filter) {
+	if (filter == "lineup-best") {
+		lineupSort("most");
+		bcsStats.lineupstats = bcsStats.lineupstats.sort(function(a, b) {
+			var winDiff = getRate(b.games, b.wins) - getRate(a.games, a.wins);
+			return winDiff;
+		});
+	} else if (filter == "lineup-worst") {
+		lineupSort("most");
+		bcsStats.lineupstats = bcsStats.lineupstats.sort(function(a, b) {
+			var looseDiff = getRate(a.games, a.wins) - getRate(b.games, b.wins);
+			return looseDiff;
+		});
+	} else if (filter == "lineup-time") {
+		bcsStats.lineupstats = bcsStats.lineupstats.sort(function(a, b) {
+			return b.time - a.time;
+		});
+	} else {
+		lineupSort("lineup-time");
+		bcsStats.lineupstats = bcsStats.lineupstats.sort(function(a, b) {
+			return b.games - a.games;
+		});
+	}
+}
+
+function loadLineups() {
+	document.getElementById("data-lineups").scrollTop = 0;
+	var container = loadId("data-lineups");
+	container.innerHTML = "<br>";
+	for (var i = 0; i < bcsStats.lineupstats.length; i++) {
+		if (i > 19) {
+			break;
+		}
+		
+		var lineup = bcsStats.lineupstats[i];
+		var loses = lineup.games - lineup.wins;
+		var rate = Math.round((lineup.wins / lineup.games) * 100);
+		var time = (lineup.time / 60).toFixed(1);
+		
+		container.innerHTML +="\t\t\t<div id=\"" + lineup.LineupID + "\" class=\"row w-105 text-center\">\n" +
+						"\t\t\t\t<div class=\"col-md-12 col-lg-6 col-xl-5 stats-box\">\n" +
+						"\t\t\t\t\t<img style=\"width: 60px\" src=\"https://crafatar.com/avatars/" + lineup.Player1UUID + "?overlay=true\"/>\n" +
+						"\t\t\t\t\t<img style=\"width: 60px\" src=\"https://crafatar.com/avatars/" + lineup.Player2UUID + "?overlay=true\"/>\n" +
+						"\t\t\t\t\t<img style=\"width: 60px\" src=\"https://crafatar.com/avatars/" + lineup.Player3UUID + "?overlay=true\"/>\n" +
+						"\t\t\t\t\t<img style=\"width: 60px\" src=\"https://crafatar.com/avatars/" + lineup.Player4UUID + "?overlay=true\"/>\n" +
+						"\t\t\t\t</div>\n" +
+						"\t\t\t\t<div class=\"col-md-12 col-lg-6 col-xl-7 stats-box\" style=\"display: flex;justify-content: center;flex-direction: column;\">\n" +
+						"\t\t\t\t\t<h5>\n" +
+						"\t\t\t\t\t\t<span class=\"text-with-space text-success\">" + lineup.wins + "<span><wbr>\n" +
+						"\t\t\t\t\t\t<span class=\"text-with-space text-danger\">" + loses + "<span><wbr>\n" +
+						"\t\t\t\t\t\t<span class=\"text-with-space text-secondary\">" + rate + "%<span><wbr>\n" +
+						"\t\t\t\t\t\t<span class=\"text-with-space text-bac\"><img height=\"25px\" src=\"img/badlion.png\"/> " + lineup.bac + "<span><wbr>\n" +
+						"\t\t\t\t\t\t<span class=\"text-with-space text-secondary\"><i class=\"fas fa-stopwatch\"></i> " + time + "h<span><wbr>\n" +
+						"\t\t\t\t\t\t<span class=\"text-with-space text-secondary\">DM: " + lineup.dms + "<span><wbr>\n" +
+						"\t\t\t\t\t\t<span class=\"text-with-space text-info\">Elo: " + lineup.elo + "</span><wbr>\n" +
+						"\t\t\t\t\t</h5>\n" +
+						"\t\t\t\t</div>\n" +
+						"\t\t\t</div>\n" +
+						"\t\t\t<hr>\n";
+	}
+}
+
+
 
 function mapSetSorter(sorter) {
 	mapFocusSorter(sorter);
@@ -187,6 +358,7 @@ function mapSort(sorter) {
 }
 
 function loadMaps() {
+	document.getElementById("map-content").scrollTop = 0;
 	var table = loadId("data-maps");
 	table.innerHTML = "";
 	for (var i = 0; i < bcsStats.maps.length; i++) {
@@ -208,6 +380,7 @@ function loadMaps() {
 		cell5.innerHTML = '<h5 class="text-secondary">' + rate + '%</h5>';
 	}
 }
+
 
 
 
@@ -242,6 +415,7 @@ function enemySortByFilter(filter) {
 }
 
 function loadEnemyList() {
+	document.getElementById("enemy-content").scrollTop = 0;
 	var table = loadId("data-enemies");
 	table.innerHTML = "";
 	for (var i = 0; i < relevantEnemies.length; i++) {
