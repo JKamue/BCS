@@ -306,9 +306,14 @@ class GommeApi
             }
 
             $tag = stringIsolateBetween($name,"[","]");
+
+            if($name != strip_tags($name)) {
+                $name = "";
+                $tag = "";
+            }
+
             $name = str_replace(" ","",$name);
             $name = str_replace("[$tag]","",$name);
-
 
             $tmp[$i]['name'] = $name;
             $tmp[$i]['tag'] = $tag;
@@ -319,15 +324,36 @@ class GommeApi
         $return['mvp'] = stringIsolateBetween($other,"playerName=","\" style=\"color:");
 
         //Detect winner
-        $piece = explode("<td>Gewinner-Clan</td>",$html)[1];
-        if (strpos($piece, $tmp[0]['name']) !== false) {
-            // Clan 1 won
-            $return['winner'] = $tmp[0];
-            $return['loser'] = $tmp[1];
+
+        if (strpos($html,"<td>Gewinner-Clan</td>") !== false) {
+            $piece = explode("<td>Gewinner-Clan</td>",$html)[1];
+            if ($tmp[0]['name'] == "") {
+                // Clan 2 Won and Clan 1 is deleted
+                echo "used case<br>";
+                $return['winner'] = $tmp[1];
+                $return['loser'] = $tmp[0];
+            } elseif (strpos($piece, $tmp[0]['name']) !== false) {
+                // Clan 1 won
+                $return['winner'] = $tmp[0];
+                $return['loser'] = $tmp[1];
+            } else {
+                // Clan 2 won
+                $return['winner'] = $tmp[1];
+                $return['loser'] = $tmp[0];
+            }
         } else {
-            // Clan 2 won
-            $return['winner'] = $tmp[1];
-            $return['loser'] = $tmp[0];
+            echo "used case<br>";
+            // Deleted clan won
+            $empty = array("names" => "", "tag" => "");
+            if ( $tmp[0]['name'] == "" ) {
+                $return['winner'] = $empty;
+                $return['loser'] = $tmp[1];
+            } else if ( $tmp[1]['name'] == "" ) {
+                $return['winner'] = $empty;
+                $return['loser'] = $tmp[0];
+            } else {
+                throw new Exception('There is no deleted Clan but also no winner!!!');
+            }
         }
 
 

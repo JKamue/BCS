@@ -42,7 +42,7 @@ class Clan
      * @param String $name The name of the Clan
      * @return Clan Clan object
      */
-    public static function getOrCreateClanByName(String $name) : Clan
+    public static function getOrCreateClanByName($name) : Clan
     {
         $stats = GommeApi::fetchClanStats($name);
         if ($stats == null || $stats == false) {
