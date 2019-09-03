@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	
+	<!-- Bootstrap-->
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+	<script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+	
+	<!-- Minerender -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/94/three.min.js" integrity="sha256-NGC9JEuTWN4GhTj091wctgjzftr+8WNDmw0H8J5YPYE=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/InventivetalentDev/MineRender@1.1.0/dist/skin.min.js"></script>
+	<script src="scripts/animatePlayer.js"></script>
+	
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" integrity="sha384-rtJEYb85SiYWgfpCr0jn174XgJTn4rptSOQsMroFBPQSGLdOC5IbubP6lJ35qoM9" crossorigin="anonymous">
+	
+	<!-- Own CSS -->
+	<link rel="stylesheet" href="styles/playerstats.css" />
+	<style>
+		#header-logo {
+			z-index: 1;
+			left: 30%;
+			top: 0px;
+			position: absolute;
+			width: 40%;
+			height:6vh;
+		}
+		
+		.navbar-header {
+			float: left;
+			padding: 15px;
+			text-align: center;
+			width: 100%;
+		}
+		.navbar-brand {float:none;}
+			
+		#centered-logo {
+			background-size: 100%;
+			background-size: cover;
+			background-position: center center;
+			vertical-align: top;
+			background-image: url(img/cw-header.png);
+			margin-top: -1rem;
+			width: 100%;
+			height: 20vh;
+		}
+			
+		.search-container {
+			float: right;
+		}
+	</style>
+	
+	<!-- Meta Tags-->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<title>BCS</title>
+	<link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+</head>
+<body style="background-color: #eeeeee">
+
+<div id="header-logo" class="d-none d-md-block">
+	<div class="row">
+		<div class="w-100 text-center vcenter">
+			<img width="50vw" alt="bcs logo" src="img/navlogo.png">
+		</div>
+	</div>
+</div>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+				<a class="nav-link" href="index.html">Home</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="clanstats.html">Clanstats <span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="bewerbung.html">Bewerbung</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Developer</a>
+			</li>
+		</ul>
+	</div>
+	
+	
+	<div class="search-container">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Clan und Spieler Suche">
+			<div class="input-group-append">
+				<button class="btn btn-secondary" type="button">
+					<i class="fa fa-search"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+</nav>
+
+<div id="centered-logo">
+	<div class="playername-container h-100">
+		<div class="flex-item">
+			<h1>
+				<span id="data-playername">{Spielername}</span>
+			</h1>
+		</div>
+	</div>
+</div>
+<div style="margin: 0px; padding-top: 30px" class="row justify-content-md-center">
+	<div class="col-md-8 col-lg-5 col-xl-3 d-none d-xl-block">
+		<div class="w-100" id="player-render"></div>
+		<script>animatePlayer("Chimchu", "player-render")</script>
+	</div>
+	<div style="border-radius: 15px; margin-bottom: 15px;" class="col-md-12 col-lg-5 col-xl-4 bg-white">
+		<br>
+		<h2 class="text-center">Aktuelle Statistik</h2>
+		<br>
+		<h3 class="text-center text-bcs">CowBuilders <small>Kühe</small></h3>
+		<h5>
+			<table style="border-radius: 5px;width: 50%; margin: 0px auto; float: none;" class="w-75">
+				<tr>
+					<td class="text-bcs">Games: 50</td>
+					<td class="text-bac">BAC: 40</td>
+				</tr>
+				<tr>
+					<td class="text-success">Wins: 25</td>
+					<td class="text-secondary">Betten: 9</td>
+				</tr>
+				<tr>
+					<td class="text-secondary">Winlose: 50%</td>
+					<td class="text-bcs">MVP: 10</td>
+				</tr>
+				<tr>
+					<td class="text-bcs">KD: 1,50</td>
+					<td class="text-muted">Ragequits: 5</td>
+				</tr>
+			</table>
+		</h5>
+		<hr>
+		<br>
+		<h3 class="text-center text-bcs">BCS Platzierung</h3>
+		<h5 style="padding-left: 20px" class="text-secondary">
+			<!-- Change padding left on lg -->
+			Spiele: Platz 300<br>
+			Spiele mit BAC: Platz 250<br>
+			Winlose: Platz 300<br>
+			KD: Platz 200<br>
+			Betten / Spiel: Platz 350<br>
+			Spielzeit: Platz 130<br>
+			Selbstmorde / Spiel: Platz 140<br>
+		</h5>
+	</div>
+	<div style="border-radius: 15px; margin-bottom: 15px;" class="col-md-12 col-lg-5 col-xl-3 offset-lg-1 offset-xl-1 bg-white">
+		<br>
+		<h2 class="text-center">Bestätigte Clans</h2>
+		<ul class="timeline">
+				<li>
+					<a target="_blank" href="clanstats.html?clan=CowBuilders">CowBuilder</a>
+					<p>
+						<table class="w-100">
+							<tr>
+								<td>Games: 50</td>
+								<td>BAC: 40</td>
+							</tr>
+							<tr>
+								<td>Wins: 25</td>
+								<td>Betten: 9</td>
+							</tr>
+							<tr>
+								<td>Winlose: 50%</td>
+								<td>MVP: 10</td>
+							</tr>
+							<tr>
+								<td>KD: 1,50</td>
+								<td>Ragequits: 5</td>
+							</tr>
+						</table>
+					</p>
+				</li>
+				<li>
+					<a target="_blank" href="https://www.totoprayogo.com/#">Clan 2</a>
+					<p>
+						<table class="w-100">
+							<tr>
+								<td>Games: 50</td>
+								<td>BAC: 40</td>
+							</tr>
+							<tr>
+								<td>Wins: 25</td>
+								<td>Betten: 9</td>
+							</tr>
+							<tr>
+								<td>Winlose: 50%</td>
+								<td>MVP: 10</td>
+							</tr>
+							<tr>
+								<td>KD: 1,50</td>
+								<td>Ragequit: 5</td>
+							</tr>
+						</table>
+					</p>
+				</li>
+				<li>
+					<a target="_blank" href="https://www.totoprayogo.com/#">Clan 3</a>
+					<p>
+						<table class="w-100">
+							<tr>
+								<td>Games: 50</td>
+								<td>BAC: 40</td>
+							</tr>
+							<tr>
+								<td>Wins: 25</td>
+								<td>Betten: 9</td>
+							</tr>
+							<tr>
+								<td>Winlose: 50%</td>
+								<td>MVP: 10</td>
+							</tr>
+							<tr>
+								<td>KD: 1,50</td>
+								<td>Ragequit: 5</td>
+							</tr>
+						</table>
+					</p>
+				</li>
+			</ul>
+	</div>
+</div>
