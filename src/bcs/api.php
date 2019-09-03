@@ -6,11 +6,13 @@ function getAllClanData($uuid) : Array
     $memberstats = getMemberStats($uuid);
     $mapstats = getMapStats($uuid);
     $enemystats = getEnemyStats($uuid);
-    $lineupstats = getLineupStats($uuid);
+    $allLineupstats = getLineupStats($uuid);
+
+    $relevantLimeupStats = array();
 
     $allMember = getAllMember($uuid);
 
-    foreach ($lineupstats as &$lineup) {
+    foreach ($allLineupstats as &$lineup) {
         $active = true;
 
         $players = array('Player1', 'Player2', 'Player3', 'Player4');
@@ -29,6 +31,9 @@ function getAllClanData($uuid) : Array
 
         $lineup['active'] = $active;
 
+        if ($lineup['games'] > 3) {
+            array_push($relevantLimeupStats, $lineup);
+        }
 
     }
 
@@ -37,7 +42,7 @@ function getAllClanData($uuid) : Array
     $return['member'] = $memberstats;
     $return['maps'] = $mapstats;
     $return['enemy'] = $enemystats;
-    $return['lineupstats'] = $lineupstats;
+    $return['lineupstats'] = $relevantLimeupStats;
 
 
 
