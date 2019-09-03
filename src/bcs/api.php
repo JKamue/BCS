@@ -31,7 +31,7 @@ function getAllClanData($uuid) : Array
 
         $lineup['active'] = $active;
 
-        if ($lineup['games'] > 3) {
+        if ($lineup['games'] > 3 && $lineup['active']) {
             array_push($relevantLimeupStats, $lineup);
         }
 
