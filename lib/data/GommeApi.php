@@ -329,7 +329,6 @@ class GommeApi
             $piece = explode("<td>Gewinner-Clan</td>",$html)[1];
             if ($tmp[0]['name'] == "") {
                 // Clan 2 Won and Clan 1 is deleted
-                echo "used case<br>";
                 $return['winner'] = $tmp[1];
                 $return['loser'] = $tmp[0];
             } elseif (strpos($piece, $tmp[0]['name']) !== false) {
@@ -342,7 +341,6 @@ class GommeApi
                 $return['loser'] = $tmp[0];
             }
         } else {
-            echo "used case<br>";
             // Deleted clan won
             $empty = array("names" => "", "tag" => "");
             if ( $tmp[0]['name'] == "" ) {

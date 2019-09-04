@@ -3,6 +3,7 @@
 <head>
 	<!-- Own JS -->
 	<script async src="scripts/loadClan.js"></script>
+	<script src="scripts/searchField.js"></script>
 	
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -81,7 +82,7 @@
 				<a class="nav-link" href="clanstats">Clanstats <span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="bewerbung">Bewerbung</a>
+				<a class="nav-link" href="https://twitter.com/messages/compose?recipient_id=1014045146067988480&text=Hi!%20Ich%20[ingamename]%20wollte%20den%20Clan%20[Clannamen]%20für%20BCS%20registrieren">Bewerbung</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="#">Developer</a>
@@ -92,9 +93,9 @@
 	
 	<div class="search-container">
 		<div class="input-group">
-			<input type="text" class="form-control" placeholder="Clan und Spieler Suche">
+			<input id="searchField" type="text" class="form-control" placeholder="Clan und Spieler Suche">
 			<div class="input-group-append">
-				<button class="btn btn-secondary" type="button">
+				<button class="btn btn-secondary" type="button" onclick="searchForClans()">
 					<i class="fa fa-search"></i>
 				</button>
 			</div>
@@ -165,7 +166,7 @@
 							<span class="text-bcs">Deathmatches: <span id="data-bcs-dm">{DMs}</span></span><br>
 							<span class="text-success">Wins: <span id="data-bcs-wins">{Wins}</span></span><br>
 							<span class="text-danger">Loses: <span id="data-bcs-loses">{Looses}</span></span><br>
-							<span class="text-secondary">Win / Loose : <span id="data-bcs-winrate">{Rate}</span></span><br>
+							<span class="text-secondary">Winrate: <span id="data-bcs-winrate">{Rate}</span>%</span><br>
 							<span class="text-muted">Spielzeit: <span id="data-bcs-playtime">{Time}</span>min </span><br>
 							<span class="text-muted d-none d-md-block">Aktiv vor <span id="data-bcs-active">{Active}</span></span>
 							<span class="text-muted d-none d-md-block">Erneuert vor <span id="data-bcs-updated">{Updated}</span></span>
@@ -185,7 +186,7 @@
 							<span class="text-bcs">Elo: <span id="data-gomme-elo">{Elo}</span></span><br>
 							<span class="text-success">Wins: <span id="data-gomme-wins">{Wins}</span></span><br>
 							<span class="text-danger">Loses: <span id="data-gomme-loses">{Loses}</span></span><br>
-							<span class="text-secondary">Winrate: <span id="data-gomme-winrate">{Rate	}</span></span><br>
+							<span class="text-secondary">Winrate: <span id="data-gomme-winrate">{Rate}</span>%</span><br>
 						</h5>
 					</div>
 				</td>
