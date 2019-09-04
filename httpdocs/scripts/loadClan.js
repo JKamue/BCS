@@ -7,8 +7,8 @@ var clanname = "CowBuilders";
 if (findGetParameter("clan") !== null) {
 	clanname = findGetParameter("clan");
 }
-getBCSStats(clanname);
-getGommeStats(clanname);
+getBCSStats(encodeURIComponent(clanname));
+getGommeStats(encodeURIComponent(clanname));
 
 
 function findGetParameter(parameterName) {
@@ -83,7 +83,7 @@ function getGommeStats(name) {
 
 function loadGommeStats() {
 	var games = 1 * gommeStats.wins + 1 * gommeStats.loses;
-	var winlose = (gommeStats.wins / gommeStats.loses).toFixed(2);
+	var winlose = Math.round(gommeStats.wins / games * 100);
 	setText("data-gomme-games", games);
 	setText("data-gomme-rank", gommeStats.rank);
 	setText("data-gomme-elo", gommeStats.elo);
@@ -124,7 +124,7 @@ function loadBcsStats() {
 	
 	// Clan Stats
 	var loses = bcsStats.clan[0].games - bcsStats.clan[0].Wins;
-	var rate = (bcsStats.clan[0].Wins / loses).toFixed(2);
+	var rate = Math.round(bcsStats.clan[0].Wins / bcsStats.clan[0].games * 100) ;
 	
 	var now = new Date();
 	var active = new Date(bcsStats.clan[0].active);
@@ -238,7 +238,6 @@ function loadPlayers() {
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\">KD " + kd + "<span><wbr>\n" +
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-muted\"><i class=\"fas fa-running\"></i> " + member.quits + "<span><wbr>\n" +
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-secondary\">" + winlose + "%<span><wbr>\n" +
-							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bac\"><img height=\"25px\" src=\"img/badlion.png\"/> " + member.bac + "<span><wbr>\n" +
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\"><i class=\"fas fa-bed\"></i> " + member.beds + "<span><wbr>\n" +
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\">MVP " + member.mvp + "<span><wbr>\n" +
 							"\t\t\t\t\t\t<span class=\"text-with-space text-secondary text-center\">" + member.name + "<span><wbr>\n</h5>";

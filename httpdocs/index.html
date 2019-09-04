@@ -2,13 +2,14 @@
 <html lang="de">
 <head>
 	
+	<script src="scripts/searchField.js"></script>
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	
 	<!-- Bootstrap-->
 	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
 	<script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+	<script src="scripts/searchField.js"></script>
 	
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -86,7 +87,7 @@
 				<a class="nav-link" href="clanstats">Clanstats</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="bewerbung">Bewerbung</a>
+				<a class="nav-link" href="https://twitter.com/messages/compose?recipient_id=1014045146067988480&text=Hi!%20Ich%20[ingamename]%20wollte%20den%20Clan%20[Clannamen]%20für%20BCS%20registrieren">Bewerbung</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="#">Developer</a>
@@ -97,9 +98,9 @@
 	
 	<div class="search-container d-none d-md-block">
 		<div class="input-group">
-			<input type="text" class="form-control" placeholder="Clan und Spieler Suche">
+			<input id="searchField" type="text" class="form-control" placeholder="Clan und Spieler Suche">
 			<div class="input-group-append">
-				<button class="btn btn-secondary" type="button">
+				<button class="btn btn-secondary" type="button" onclick="searchForClans()">
 					<i class="fa fa-search"></i>
 				</button>
 			</div>
@@ -117,14 +118,14 @@
 	<div class="row">
 		<div class="col-md-6 col-lg-4 col-xl-3 d-block d-md-none">
 			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Clan und Spieler Suche">
-				<div class="input-group-append">
-				  <button class="btn btn-secondary" type="button">
+			<input id="searchField2" type="text" class="form-control" placeholder="Clan und Spieler Suche">
+			<div class="input-group-append">
+				<button class="btn btn-secondary" type="button" onclick="searchForClans()">
 					<i class="fa fa-search"></i>
-				  </button>
-				</div>
+				</button>
 			</div>
-			<br>
+		</div>
+		<br>
 		</div>
 		<div class="col-md-12 col-lg-12 col-xl-12 d-none d-md-block">
 			<h2 class="text-center">Über BCS</h2>

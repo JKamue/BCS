@@ -1,5 +1,10 @@
 <?php
 
+function bcsSearchClan($term)
+{
+    return Database::select("SELECT * FROM `clan` WHERE LOWER(`ClanName`) LIKE LOWER(?)",array("%".$term."%"));
+}
+
 function getAllClanData($uuid) : Array
 {
     $clanstats = getClanStats($uuid);
@@ -30,8 +35,8 @@ function getAllClanData($uuid) : Array
         }
 
         $lineup['active'] = $active;
-
-        if ($lineup['games'] > 3 && $lineup['active']) {
+        //$lineup['games'] > 3 &&
+        if ($lineup['active']) {
             array_push($relevantLimeupStats, $lineup);
         }
 
