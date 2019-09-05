@@ -137,7 +137,7 @@ function getBCSStats()
     // Anzahl an Clans
     $clanAmountRequest = "SELECT count(ClanUUID) as ClanAmount FROM `clan`";
     // Anzahl an Spielern
-    $playerAmountRequest = "SELECT count(UUID) as PlayerAmount FROM `player`";
+    $playerAmountRequest = "SELECT count(PlayerID) as PlayerAmount FROM `member` WHERE Active = 1";
     // Anzahl matches und count spielzeit
     $gameStatsRequest = "SELECT count(GameID) as GameAmount, sum(GameTime) as GameTime FROM `game`";
     // Anzahl Lineups
