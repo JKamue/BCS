@@ -64,7 +64,7 @@ function setText(id, text) {
 
 function getGommeStats(name) {
 	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.open("GET","http://www.cwstats.de/api/gommeapi/api.php?function=clanStats&name=" + name, true);
+	xmlhttp.open("GET","api/gommeapi/api.php?function=clanStats&name=" + name, true);
 	xmlhttp.send();
 		
 	xmlhttp.onreadystatechange = function() {
