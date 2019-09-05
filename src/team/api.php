@@ -1,6 +1,5 @@
 <?php
 
-
 function deleteTeam($name) {
     $sql = "DELETE FROM team WHERE name = ?";
     Database::execute($sql, array($name));
