@@ -38,7 +38,8 @@ function clanTable(item, index) {
         "<td>" + formatTime(item.LastActive) + "</td>" +
         "<td><a href='https://www.gommehd.net/clan-profile?name=" + encodeURIComponent(item.ClanName) + "' target='_blank'>Gomme</a> " +
         "<a href='https://www.gommehd.net/clan-match?id=" + encodeURIComponent(item.LastMatch) + "' target='_blank'>CW</a> " +
-        "<a target='_blank' href='api.php?checkClan=" + encodeURIComponent(item.ClanName) + "'>Überprüfen</a></td></tr>";
+        "<a target='_blank' href='api.php?checkClan=" + encodeURIComponent(item.ClanName) + "'>Überprüfen</a> " +
+        "<a target='_blank' href='api.php?checkActive=" + encodeURIComponent(item.ClanName) + "'>Aktiv prüfen</a></td></tr>";
 }
 
 function showClans() {

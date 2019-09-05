@@ -43,4 +43,7 @@ if (isset($_GET['addClan'])) {
 } else if (isset($_GET['checkClan'])) {
     ignore_user_abort(true);
     echo json_encode(Clan::updateClan($_GET['checkClan']));
+} else if (isset($_GET['checkActive'])) {
+    $clan = Clan::getOrCreateClanByName($_GET['checkActive']);
+    echo json_encode($clan->setActivePlayers());
 }
