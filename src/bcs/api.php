@@ -17,6 +17,7 @@ function getAllClanData($uuid) : Array
 
     $allMember = getAllMember($uuid);
 
+    // Take only active lineups
     foreach ($allLineupstats as &$lineup) {
         $active = true;
 
@@ -42,11 +43,26 @@ function getAllClanData($uuid) : Array
 
     }
 
+    // Mark BCS Clans
+    $bcsClans = getAllClans();
+    $completeEnemyStats = array();
+    foreach ($enemystats as $enemy) {
+        $enemy['bcs'] = false;
+        foreach ($bcsClans as $clan) {
+            if ($clan['ClanUUID'] == $enemy['uuid']) {
+                $enemy['bcs'] = true;
+                continue;
+            }
+        }
+        array_push($completeEnemyStats, $enemy);
+    }
+
+
     $return = array();
     $return['clan'] = $clanstats;
     $return['member'] = $memberstats;
     $return['maps'] = $mapstats;
-    $return['enemy'] = $enemystats;
+    $return['enemy'] = $completeEnemyStats;
     $return['lineupstats'] = $relevantLimeupStats;
 
 
@@ -130,6 +146,11 @@ JOIN player ON member.UUID = player.UUID
 WHERE ClanUUID = ?";
 
     return Database::select($allmember, array($uuid));
+}
+
+function getAllClans() {
+    $allBcsClanRequest = "SELECT ClanUUID FROM `clan`";
+    return Database::select($allBcsClanRequest,array());
 }
 
 function getBCSStats()
