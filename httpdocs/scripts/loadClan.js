@@ -10,6 +10,14 @@ if (findGetParameter("clan") !== null) {
 getBCSStats(encodeURIComponent(clanname));
 getGommeStats(encodeURIComponent(clanname));
 
+function loadOtherClan(clanname) {
+	bcsStats = "";
+	gommeStats = "";
+	relevantEnemies = [];
+	getBCSStats(encodeURIComponent(clanname));
+	getGommeStats(encodeURIComponent(clanname));
+	window.history.pushState('clanstats?clan=' + encodeURIComponent(clanname), 'BCS', '/clanstats.html?clan=' + encodeURIComponent(clanname));
+}
 
 function findGetParameter(parameterName) {
     var result = null,
@@ -432,7 +440,11 @@ function loadEnemyList() {
 		var cell3 = row.insertCell(2);
 		var cell4 = row.insertCell(3);
 		
-		cell1.innerHTML = '<h5 class="text-bcs inline">' + enemy.name + ' <small class="hide-on-tiny">[' + enemy.tag + ']</small></h5>';
+		if (enemy.bcs == true) {
+			cell1.innerHTML = '<h5 class="text-bcs inline clickable" onclick="loadOtherClan(\'' + enemy.name + '\')"><u>' + enemy.name + '</u> <small class="hide-on-tiny">[' + enemy.tag + ']</small></h5>';
+		} else {
+			cell1.innerHTML = '<h5 class="text-bcs inline">' + enemy.name + ' <small class="hide-on-tiny">[' + enemy.tag + ']</small></h5>';
+		}
 		cell2.innerHTML = '<h5 class="text-success">' + enemy.wins + '</h5>';
 		cell3.innerHTML = '<h5 class="text-danger">' + loses + '</h5>';
 		cell4.innerHTML = '<h5 class="text-secondary">' + rate + '%</h5>';
