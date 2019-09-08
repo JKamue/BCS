@@ -46,4 +46,6 @@ if (isset($_GET['addClan'])) {
 } else if (isset($_GET['checkActive'])) {
     $clan = Clan::getOrCreateClanByName($_GET['checkActive']);
     echo json_encode($clan->setActivePlayers());
+} else if (isset($_GET['memberStats'])) {
+    checkMemberStats($_GET['memberStats']);
 }
