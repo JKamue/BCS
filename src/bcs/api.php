@@ -176,3 +176,37 @@ function getBCSStats()
 
     return $response;
 }
+
+function getPlayerStats($playeruuid) {
+    $memberhistory = "SELECT t.name as name, t.UUID as uuid, t.MVP as mvp, t.Betten as beds, t.Kills as kills, t.Killed as killed, t.Quits as quits, t.Died as died, t.BAC as bac, t.PlayerID as member,b.Games as games, b.Win as wins, t.Active as active, clan.ClanName as clan, clan.ClanTag as tag
+        FROM(SELECT player.name, member.MVP, member.Betten, member.Kills, member.Killed, member.Quits, member.Died, member.BAC, member.UUID, member.PlayerID, member.ClanUUID, member.Active
+            FROM member
+            JOIN player
+            WHERE member.UUID = player.UUID
+            GROUP BY member.PlayerID) t
+        JOIN(SELECT member.PlayerID, COUNT(game.GameID) AS Games, SUM(game.Win) AS Win
+            FROM lineup
+            JOIN member
+            ON member.PlayerID = lineup.Player1UUID OR member.PlayerID = lineup.Player2UUID OR member.PlayerID = lineup.Player3UUID OR member.PlayerID=lineup.Player4UUID
+            JOIN game
+            ON game.LineupID = lineup.LineupID
+                WHERE member.UUID = ?
+            GROUP BY member.PlayerID) b ON t.PlayerID= b.PlayerID
+        JOIN clan ON clan.ClanUUID = t.ClanUUID";
+
+    $list = json_decode(file_get_contents("../../data/tmp/ranking.json"), true);
+    if (!isset($list["games"][$playeruuid])) {
+        $tmp['history']['error'] = true;
+    } else {
+        $tmp['games'] = $list['games'][$playeruuid];
+        $tmp['bac'] = $list['bac'][$playeruuid];
+        $tmp['winlose'] = $list['winlose'][$playeruuid];
+        $tmp['kd'] = $list['kd'][$playeruuid];
+        $tmp['beds'] = $list['beds'][$playeruuid];
+        $tmp['suicide'] = $list['suicide'][$playeruuid];
+        $tmp['quits'] = $list['quits'][$playeruuid];
+    }
+
+    $tmp['clans'] = Database::select($memberhistory, array($playeruuid));
+    return $tmp;
+}
