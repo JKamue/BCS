@@ -35,7 +35,7 @@ function checkMemberStats($playername) {
         echo "BAC-Spiele: " . $list['bac'][$playername] . ", ". $player['bac'] ."<br>";
         echo "Winlose: " . $list['winlose'][$playername] . ", ". $winlose ."%<br>";
         echo "KD: " . $list['kd'][$playername] . ", ". $kd ."<br>";
-        echo "Betten: " . $list['beds'][$playername] . ", ". $player['games'] ."<br>";
+        echo "Betten: " . $list['beds'][$playername] . ", ". $player['beds'] ."<br>";
         echo "Selbstmorde: " . $list['suicide'][$playername] . ", ". $player['died'] ."<br>";
         echo "Ragequit: " . $list['quits'][$playername] . ", ". $player['quits'] ."<br>";
     } else {
