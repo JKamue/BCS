@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+	<script async src="scripts/loadPlayerstats.js"></script>
+	<script src="scripts/searchField.js"></script>
+	
 	<!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	
@@ -77,16 +80,16 @@
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active">
-				<a class="nav-link" href="index">Home</a>
+				<a class="nav-link" href="index">Home <span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="clanstats">Clanstats <span class="sr-only">(current)</span></a>
+				<a class="nav-link" href="clanstats">Clanstats</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="bewerbung.html">Bewerbung</a>
+				<a class="nav-link" href="https://twitter.com/messages/compose?recipient_id=1014045146067988480&text=Hi!%20Ich%20[ingamename]%20wollte%20den%20Clan%20[Clannamen]%20für%20BCS%20registrieren">Bewerbung</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">Developer</a>
+				<a class="nav-link" href="imprint">Impressum</a>
 			</li>
 		</ul>
 	</div>
@@ -94,9 +97,9 @@
 	
 	<div class="search-container">
 		<div class="input-group">
-			<input type="text" class="form-control" placeholder="Clan und Spieler Suche">
+			<input id="searchField" type="text" class="form-control" placeholder="Clan und Spieler Suche">
 			<div class="input-group-append">
-				<button class="btn btn-secondary" type="button">
+				<button class="btn btn-secondary" type="button" onclick="searchForClans('searchField')">
 					<i class="fa fa-search"></i>
 				</button>
 			</div>
@@ -116,37 +119,36 @@
 <div style="margin: 0px; padding-top: 30px" class="row justify-content-md-center">
 	<div class="col-md-8 col-lg-5 col-xl-3 d-none d-xl-block">
 		<div class="w-100" id="player-render"></div>
-		<script>animatePlayer("Chimchu", "player-render")</script>
 	</div>
 	<div style="border-radius: 15px; margin-bottom: 15px;" class="col-md-12 col-lg-5 col-xl-4 bg-white">
 		<br>
 		<h2 class="text-center">Aktuelle Statistik</h2>
 		<br>
-		<h3 class="text-center text-bcs">CowBuilders <small>Kühe</small></h3>
-		<h5>
+		<h3 class="text-center text-bcs" id="active-clan"><a href="">CowBuilders <small>Kühe</small></a></h3>
+		<h5 id="active-stats-box">
 			<table style="border-radius: 5px;width: 50%; margin: 0px auto; float: none;" class="w-75">
 				<tr>
-					<td class="text-bcs">Games: 50</td>
-					<td class="text-bac">BAC: 40</td>
+					<td class="text-bcs" id="active-games">Games: 50</td>
+					<td class="text-secondary" id="active-winlose">Winlose: 50%</td>
 				</tr>
 				<tr>
-					<td class="text-success">Wins: 25</td>
-					<td class="text-secondary">Betten: 9</td>
+					<td class="text-success" id="active-wins">Wins: 25</td>
+					<td class="text-danger" id="active-loses">Loses: 25</td>
 				</tr>
 				<tr>
-					<td class="text-secondary">Winlose: 50%</td>
-					<td class="text-bcs">MVP: 10</td>
+					<td class="text-secondary" id="active-beds">Betten: 9</td>
+					<td class="text-bcs" id="active-mvp">MVP: 10</td>
 				</tr>
 				<tr>
-					<td class="text-bcs">KD: 1,50</td>
-					<td class="text-muted">Ragequits: 5</td>
+					<td class="text-bcs" id="active-kd">KD: 1,50</td>
+					<td class="text-muted" id="active-quits">Ragequits: 5</td>
 				</tr>
 			</table>
 		</h5>
 		<hr>
 		<br>
 		<h3 class="text-center text-bcs">BCS Platzierung</h3>
-		<h5 style="padding-left: 20px" class="text-secondary">
+		<h5 id="ranking" style="padding-left: 20px" class="text-secondary">
 			<!-- Change padding left on lg -->
 			Spiele: Platz 300<br>
 			Spiele mit BAC: Platz 250<br>
@@ -157,79 +159,9 @@
 			Selbstmorde / Spiel: Platz 140<br>
 		</h5>
 	</div>
-	<div style="border-radius: 15px; margin-bottom: 15px;" class="col-md-12 col-lg-5 col-xl-3 offset-lg-1 offset-xl-1 bg-white">
+	<div id="history-box" style="border-radius: 15px; margin-bottom: 15px;" class="col-md-12 col-lg-5 col-xl-3 offset-lg-1 offset-xl-1 bg-white">
 		<br>
 		<h2 class="text-center">Bestätigte Clans</h2>
-		<ul class="timeline">
-				<li>
-					<a target="_blank" href="clanstats.html?clan=CowBuilders">CowBuilder</a>
-					<p>
-						<table class="w-100">
-							<tr>
-								<td>Games: 50</td>
-								<td>BAC: 40</td>
-							</tr>
-							<tr>
-								<td>Wins: 25</td>
-								<td>Betten: 9</td>
-							</tr>
-							<tr>
-								<td>Winlose: 50%</td>
-								<td>MVP: 10</td>
-							</tr>
-							<tr>
-								<td>KD: 1,50</td>
-								<td>Ragequits: 5</td>
-							</tr>
-						</table>
-					</p>
-				</li>
-				<li>
-					<a target="_blank" href="https://www.totoprayogo.com/#">Clan 2</a>
-					<p>
-						<table class="w-100">
-							<tr>
-								<td>Games: 50</td>
-								<td>BAC: 40</td>
-							</tr>
-							<tr>
-								<td>Wins: 25</td>
-								<td>Betten: 9</td>
-							</tr>
-							<tr>
-								<td>Winlose: 50%</td>
-								<td>MVP: 10</td>
-							</tr>
-							<tr>
-								<td>KD: 1,50</td>
-								<td>Ragequit: 5</td>
-							</tr>
-						</table>
-					</p>
-				</li>
-				<li>
-					<a target="_blank" href="https://www.totoprayogo.com/#">Clan 3</a>
-					<p>
-						<table class="w-100">
-							<tr>
-								<td>Games: 50</td>
-								<td>BAC: 40</td>
-							</tr>
-							<tr>
-								<td>Wins: 25</td>
-								<td>Betten: 9</td>
-							</tr>
-							<tr>
-								<td>Winlose: 50%</td>
-								<td>MVP: 10</td>
-							</tr>
-							<tr>
-								<td>KD: 1,50</td>
-								<td>Ragequit: 5</td>
-							</tr>
-						</table>
-					</p>
-				</li>
-			</ul>
+		<ul class="timeline" id="history"></ul>
 	</div>
 </div>
