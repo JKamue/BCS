@@ -152,7 +152,7 @@ function loadPresent() {
 			kd = "&infin;";
 		}
 		
-		loadId("active-clan").innerHTML = "<a href=''>" + activeClan.clan + " <small>" + activeClan.tag + "</small></a>";
+		loadId("active-clan").innerHTML = "<a href='clanstats.html?clan=" + activeClan.clan + "'>" + activeClan.clan + " <small>" + activeClan.tag + "</small></a>";
 		
 		loadId("active-games").innerText = "Games: " + activeClan.games;
 		loadId("active-winlose").innerText = "Winlose: " + winlose + "%";
