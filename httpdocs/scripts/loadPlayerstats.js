@@ -152,7 +152,7 @@ function loadPresent() {
 			kd = "&infin;";
 		}
 		
-		loadId("active-clan").innerHTML = activeClan.clan + " <small>" + activeClan.tag + "</small>";
+		loadId("active-clan").innerHTML = "<a href=''>" + activeClan.clan + " <small>" + activeClan.tag + "</small></a>";
 		
 		loadId("active-games").innerText = "Games: " + activeClan.games;
 		loadId("active-winlose").innerText = "Winlose: " + winlose + "%";
@@ -160,7 +160,7 @@ function loadPresent() {
 		loadId("active-loses").innerText = "Loses: " + (activeClan.games - activeClan.wins);
 		loadId("active-beds").innerText = "Betten: " + activeClan.beds;
 		loadId("active-mvp").innerText = "MVP: " + activeClan.mvp;
-		loadId("active-kd").innerText = "KD: " + kd;
+		loadId("active-kd").innerHTML = "KD: " + kd;
 		loadId("active-quits").innerText = "Ragequits: " + activeClan.quits;
 	}
 }

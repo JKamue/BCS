@@ -14,7 +14,9 @@ if (isset($_GET['clanname'])) {
 } elseif (isset($_GET['bcsstats'])) {
     echo json_encode(getBCSStats());
 } elseif (isset($_GET['search'])) {
-    echo json_encode(bcsSearchClan($_GET['search']));
+    $result['clans'] = bcsSearchClan($_GET['search']);
+    $result['member'] = bcsSearchPlayer($_GET['search']);
+    echo json_encode($result);
 } elseif (isset($_GET['member'])) {
     echo json_encode(getPlayerStats($_GET['member']));
 }
