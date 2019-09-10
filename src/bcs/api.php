@@ -2,7 +2,17 @@
 
 function bcsSearchClan($term)
 {
-    return Database::select("SELECT * FROM `clan` WHERE LOWER(`ClanName`) LIKE LOWER(?)",array("%".$term."%"));
+    if (strlen($term) < 3) { return "";}
+    return Database::select("SELECT ClanUUID, ClanName FROM `clan` WHERE LOWER(`ClanName`) LIKE LOWER(?)",array("%".$term."%"));
+}
+
+function bcsSearchPlayer($term) {
+    if (strlen($term) < 3) { return "";}
+    $sql = "SELECT member.UUID, player.name FROM `member`
+JOIN player on member.UUID = player.UUID
+WHERE LOWER(player.name) LIKE LOWER(?) GROUP BY player.name";
+
+    return Database::select($sql,array("%".$term."%"));
 }
 
 function getAllClanData($uuid) : Array
