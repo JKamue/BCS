@@ -2,7 +2,7 @@
 
 class MojangApi
 {
-    public static function namesToUUID($array) {
+    public static function requestData($array) : Array {
         $url = "https://api.mojang.com/profiles/minecraft";
         $parts = parse_url($url);
         $host = $parts['host'];
@@ -21,6 +21,17 @@ class MojangApi
         $result = curl_exec($ch);
         $result = json_decode($result, true);
         curl_close($ch);
+        return $result;
+    }
+
+    public static function namesToUUID($array) {
+        $chunks = array_chunk($array, 10);
+        $result = array();
+
+        foreach ($chunks as &$chunk) {
+            $result = array_merge($result, self::requestData($chunk));
+        }
+
         return $result;
     }
 
