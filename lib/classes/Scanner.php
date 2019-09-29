@@ -16,13 +16,15 @@ class Scanner
 
         $games = array_reverse($games);
         foreach ($games as &$game) {
+            $i++;
+            if ($debug) {self::progressBar($i, 100, $game['matchid']);}
             try {
-                $i++;
-                if ($debug) {self::progressBar($i, 100, $game['matchid']);}
                 $cw = Cw::getMatch($game, $clans);
                 $cw->compute();
                 $cw->save();
             } catch (Exception $e) {
+                echo '<b>Fehler ist aufgetreten: ',  $e->getMessage(), "\n</b><br>";
+            } catch(TypeError $e){
                 echo '<b>Fehler ist aufgetreten: ',  $e->getMessage(), "\n</b><br>";
             }
         }
