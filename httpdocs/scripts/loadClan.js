@@ -237,7 +237,7 @@ function loadPlayers() {
 			kd = "&infin;";
 		}
 		
-		cell1.innerHTML = '<img style="width: 60px" src="https://crafatar.com/avatars/' + member.uuid +'?overlay=true"/>';
+		cell1.innerHTML = '<img style="width: 60px" src="https://visage.surgeplay.com/face/128/' + member.uuid +'?overlay=true"/>';
 		cell1.style.verticalAlign = "middle";
 		
 		cell2.innerHTML = "<h5>\n" +
