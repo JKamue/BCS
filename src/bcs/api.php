@@ -1,5 +1,15 @@
 <?php
 
+function getAllClanstats() {
+    $sql = "SELECT clan.ClanUUID As uuid, clan.ClanTag As tag, clan.ClanName As Name, clan.DateAdded As added, clan.DateUpdated As updated, clan.LastActive as active, clan.LastMatch as last,
+                        COUNT(game.GameID) AS games, SUM(game.Win) As Wins, SUM(BACGame) As Bac, SUM(game.Elo) As Elo, SUM(game.GameTime) As time, SUM(CASE WHEN game.GameTime > 60 THEN 1 ELSE 0 END) As dms
+                From clan
+                JOIN game On clan.ClanUUID = game.ClanUUID
+                Group By ClanName  
+                ORDER BY `dms`  DESC";
+    return Database::select($sql, array());
+}
+
 function bcsSearchClan($term)
 {
     if (strlen($term) < 3) { return "";}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Clanvergleich</title>
+    <meta charset="utf-8" />
+
+    <script src="scripts/searchField.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap-->
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+    <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Ag-grid -->
+    <script src="https://unpkg.com/ag-grid-community@21.2.1/dist/ag-grid-community.min.js"></script></head>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" integrity="sha384-rtJEYb85SiYWgfpCr0jn174XgJTn4rptSOQsMroFBPQSGLdOC5IbubP6lJ35qoM9" crossorigin="anonymous">
+
+    <!-- Own CSS -->
+    <link rel="stylesheet" href="styles/playerstats.css" />
+    <style>
+        #header-logo {
+            z-index: 1;
+            left: 30%;
+            top: 0px;
+            position: absolute;
+            width: 40%;
+            height:6vh;
+        }
+
+        .navbar-header {
+            float: left;
+            padding: 15px;
+            text-align: center;
+            width: 100%;
+        }
+        .navbar-brand {float:none;}
+
+        #centered-logo {
+            background-size: 100%;
+            background-size: cover;
+            background-position: center center;
+            vertical-align: top;
+            background-image: url(img/cw-header.png);
+            margin-top: -1rem;
+            width: 100%;
+            height: 20vh;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+        }
+        html {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0;
+            overflow: auto;
+        }
+        body {
+            overflow: auto;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .orange {
+            color: orangered;
+        }
+
+        .blue {
+            color: mediumblue;
+        }
+
+
+        .center-me {
+            width: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            padding: 20px;
+            resize: both;
+            overflow: auto;
+        }
+
+    </style><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BCS</title>
+<link rel='shortcut icon' type='image/x-icon' href='img/favicon.ico' />
+</head>
+
+<body style="background-color: #eeeeee">
+
+<div id="header-logo" class="d-none d-md-block">
+    <div class="row">
+        <div class="w-100 text-center vcenter">
+            <img width="50vw" alt="bcs logo" src="img/navlogo.png">
+        </div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="index">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="clanstats">Clanstats</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link d-none d-lg-block" href="clanlist">Clanranking</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://twitter.com/messages/compose?recipient_id=1014045146067988480&text=Hi!%20Ich%20[ingamename]%20wollte%20den%20Clan%20[Clannamen]%20für%20BCS%20registrieren">Bewerbung</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="imprint">Impressum</a>
+            </li>
+        </ul>
+    </div>
+
+
+    <div class="search-container">
+        <div class="input-group">
+            <input id="searchField" type="text" class="form-control" placeholder="Clan und Spieler Suche">
+            <div class="input-group-append">
+                <button class="btn btn-secondary" type="button" onclick="searchForClans('searchField')">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div style="height: 90%; margin: 1%;">
+    <div id="myGrid" class="ag-theme-balham" style="width: 100%; height: 100%;"></div>
+</div>
+
+<script src="scripts/clanlist.js"></script>
+</body>
+</html>

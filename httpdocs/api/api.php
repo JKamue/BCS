@@ -19,4 +19,6 @@ if (isset($_GET['clanname'])) {
     echo json_encode($result);
 } elseif (isset($_GET['member'])) {
     echo json_encode(getPlayerStats($_GET['member']));
+} elseif (isset($_GET['getAllClans'])) {
+    echo json_encode(getAllClanstats());
 }
