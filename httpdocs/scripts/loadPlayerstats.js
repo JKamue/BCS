@@ -79,8 +79,8 @@ function loadRanking() {
 		"\t\t\tWinlose: Platz " + playerStats.winlose + "<br>\n" +
 		"\t\t\tKD: Platz " + playerStats.kd + "<br>\n" +
 		"\t\t\tBetten: Platz " + playerStats.bac + "<br>\n" +
-		"\t\t\tSelbstmorde: " + playerStats.suicide + "<br>\n" +
-		"\t\t\tRagequits: " + playerStats.quits + "<br>\n";
+		"\t\t\tSelbstmorde: Platz " + playerStats.suicide + "<br>\n" +
+		"\t\t\tRagequits: Platz " + playerStats.quits + "<br>\n";
 	}
 }
 
@@ -101,7 +101,7 @@ function loadPast() {
 			var history = loadId("history");
 			var clanBox = document.createElement('li');
 			clanBox.innerHTML = "" + 
-			"\t\t\t\t<a target=\"_blank\" href=\"clanstats.html?clan=" + clan.clan + "\">" + clan.clan + "</a>\n" +
+			"\t\t\t\t<a target=\"_blank\" href=\"clanstats.html?clan=" + encodeURIComponent(clan.clan) + "\">" + clan.clan + "</a>\n" +
 			"\t\t\t\t\t<p>\n" +
 			"\t\t\t\t\t\t<table class=\"w-100\">\n" +
 			"\t\t\t\t\t\t\t<tr>\n" +
