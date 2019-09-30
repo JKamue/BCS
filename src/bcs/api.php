@@ -94,7 +94,7 @@ function getAllClanData($uuid) : Array
 function getClanStats($uuid)
 {
     $clanstats = "SELECT clan.ClanUUID As uuid, clan.ClanTag As tag, clan.ClanName As Name, clan.DateAdded As added, clan.DateUpdated As updated, clan.LastActive as active, clan.LastMatch as last,
-		COUNT(game.GameID) AS games, SUM(game.Win) As Wins, SUM(BACGame) As Bac, SUM(game.Elo) As Elo, SUM(game.GameTime) As time, SUM(CASE WHEN game.GameTime > 60 THEN 1 ELSE 0 END) As dms
+		COUNT(game.GameID) AS games, SUM(game.Win) As Wins, SUM(BACGame) As Bac, SUM(game.Elo) As Elo, SUM(game.GameTime) As time, SUM(CASE WHEN game.GameTime >= 65 THEN 1 ELSE 0 END) As dms
 From game
 JOIN clan
 WHERE game.ClanUUID = ? AND clan.ClanUUID = ? ;";
