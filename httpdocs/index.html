@@ -101,7 +101,7 @@
 	
 	<div class="search-container d-none d-md-block">
 		<div class="input-group">
-			<input id="searchField" type="text" class="form-control" placeholder="Clan und Spieler Suche">
+			<input id="searchField" type="text" class="form-control" onkeypress="checkIfEnter(event, 'searchField')" placeholder="Clan und Spieler Suche">
 			<div class="input-group-append">
 				<button class="btn btn-secondary" type="button" onclick="searchForClans('searchField')">
 					<i class="fa fa-search"></i>
@@ -121,7 +121,7 @@
 	<div class="row">
 		<div class="col-md-6 col-lg-4 col-xl-3 d-block d-md-none">
 			<div class="input-group">
-			<input id="searchField2" type="text" class="form-control" placeholder="Clan und Spieler Suche">
+			<input id="searchField2" type="text" class="form-control" onkeypress="checkIfEnter(event, 'searchField2')" placeholder="Clan und Spieler Suche">
 			<div class="input-group-append">
 				<button class="btn btn-secondary" type="button" onclick="searchForClans('searchField2')">
 					<i class="fa fa-search"></i>
