@@ -96,7 +96,7 @@
 	
 	<div class="search-container">
 		<div class="input-group">
-			<input id="searchField" type="text" class="form-control" placeholder="Clan und Spieler Suche">
+			<input id="searchField" type="text" class="form-control" onkeypress="checkIfEnter(event, 'searchField')" placeholder="Clan und Spieler Suche">
 			<div class="input-group-append">
 				<button class="btn btn-secondary" type="button" onclick="searchForClans('searchField')">
 					<i class="fa fa-search"></i>
