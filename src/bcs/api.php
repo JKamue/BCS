@@ -1,5 +1,43 @@
 <?php
 
+function getRanking($number) {
+    $list = json_decode(file_get_contents("../../data/tmp/ranking.json"), true);
+    $tmp['games'] = getTopPlayer($list['games'], $number);
+    $tmp['bac'] = getTopPlayer($list['bac'], $number);
+    $tmp['winlose'] = getTopPlayer($list['winlose'], $number);
+    $tmp['kd'] = getTopPlayer($list['kd'], $number);
+    $tmp['beds'] = getTopPlayer($list['beds'], $number);
+    $tmp['suicide'] = getTopPlayer($list['suicide'], $number);
+    $tmp['quits'] = getTopPlayer($list['quits'], $number);
+    $tmp['mvp'] = getTopPlayer($list['mvp'], $number);
+
+    return $tmp;
+}
+
+function getTopPlayer($array, $number) {
+    for ($i = 0; $i < $number; $i++) {
+        $result[$i] = [
+            "name" => "not found",
+            "uuid" => "not found",
+        ];
+    }
+
+    foreach ($array as $entry => $rank) {
+        $rank -= 1;
+        if ($rank < $number) {
+            if (strlen($entry) == 32) {
+                $result[$rank]["uuid"] = $entry;
+            } else {
+                $result[$rank]["name"] = $entry;
+            }
+        }
+    }
+
+    $result["keyholder"] = true;
+
+    return $result;
+}
+
 function getAllClanstats() {
     $sql = "SELECT clan.ClanUUID As uuid, clan.ClanTag As tag, clan.ClanName As Name, clan.DateAdded As added, clan.DateUpdated As updated, clan.LastActive as active, clan.LastMatch as last,
                         COUNT(game.GameID) AS games, SUM(game.Win) As Wins, SUM(BACGame) As Bac, SUM(game.Elo) As Elo, SUM(game.GameTime) As time, SUM(CASE WHEN game.GameTime > 65 THEN 1 ELSE 0 END) As dms
