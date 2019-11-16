@@ -38,6 +38,7 @@ class MemberRanker
         $ranking['beds'] = $this->getSorted($memberList,"rankByBeds");
         $ranking['suicide'] = $this->getSorted($memberList,"rankBySuicide");
         $ranking['quits'] = $this->getSorted($memberList,"rankByRagequits");
+        $ranking['mvp'] = $this->getSorted($memberList,"rankByMvp");
 
         file_put_contents($savePath,json_encode($ranking));
     }
@@ -75,16 +76,16 @@ class MemberRanker
         return $b["beds"] - $a["beds"];
     }
 
-    private function rankByPlaytime($a, $b) {
-
-    }
-
     private function rankBySuicide($a, $b) {
         return $b["died"] - $a["died"];
     }
 
     private function rankByRagequits($a, $b) {
         return $b["quits"] - $a["quits"];
+    }
+
+    private function rankByMvp($a, $b) {
+        return $b["mvp"] - $a["mvp"];
     }
 
     private function fetchList(int $minGames, Bool $onlyActive)

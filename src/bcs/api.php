@@ -225,6 +225,7 @@ function getPlayerStats($playeruuid) {
         $tmp['beds'] = $list['beds'][$playeruuid];
         $tmp['suicide'] = $list['suicide'][$playeruuid];
         $tmp['quits'] = $list['quits'][$playeruuid];
+        $tmp['mvp'] = $list['mvp'][$playeruuid];
     }
 
     $tmp['clans'] = Database::select($memberhistory, array($playeruuid));
