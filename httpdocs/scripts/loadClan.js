@@ -232,6 +232,7 @@ function loadPlayers() {
 		
 		var loses = member.games - member.wins;
 		var winlose = Math.round((member.wins / member.games) * 100);
+		var bedchance = Math.round((member.beds / member.games) * 100);
 		var kd = (member.kills / (1* member.quits + 1*  member.died + 1* member.killed)).toFixed(2);
 		if (kd == Infinity) {
 			kd = "&infin;";
@@ -246,7 +247,7 @@ function loadPlayers() {
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\">KD " + kd + "<span><wbr>\n" +
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-muted\"><i class=\"fas fa-running\"></i> " + member.quits + "<span><wbr>\n" +
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-secondary\">" + winlose + "%<span><wbr>\n" +
-							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\"><i class=\"fas fa-bed\"></i> " + member.beds + "<span><wbr>\n" +
+							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\"><i class=\"fas fa-bed\"></i> " + member.beds + " - " + bedchance + "%<span><wbr>\n" +
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\">MVP " + member.mvp + "<span><wbr>\n" +
 							"\t\t\t\t\t\t<span class=\"text-with-space text-secondary text-center\">" + member.name + "<span><wbr>\n</h5>";
 	}
