@@ -167,6 +167,10 @@ function loadBcsStats() {
 	
 	// Player Stats
 	playerSetSorter("player-games");
+
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
 }
 
 
@@ -249,7 +253,7 @@ function loadPlayers() {
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-secondary\">" + winlose + "%<span><wbr>\n" +
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\"><i class=\"fas fa-bed\"></i> " + member.beds + " - " + bedchance + "%<span><wbr>\n" +
 							"\t\t\t\t\t\t\t<span class=\"text-with-space text-bcs\">MVP " + member.mvp + "<span><wbr>\n" +
-							"\t\t\t\t\t\t<span class=\"text-with-space text-secondary text-center\">" + member.name + "<span><wbr>\n</h5>";
+							"\t\t\t\t\t\t<a href=\"/playerstats.html?player=" + member.uuid +"\" class=\"text-with-space text-center\" style=\"color: #0000EE;\"><u>" + member.name + "</u><span><wbr>\n</h5>";
 	}
 }
 
