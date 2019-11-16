@@ -21,4 +21,6 @@ if (isset($_GET['clanname'])) {
     echo json_encode(getPlayerStats($_GET['member']));
 } elseif (isset($_GET['getAllClans'])) {
     echo json_encode(getAllClanstats());
+} elseif (isset($_GET['getRanking'])) {
+    echo json_encode(getRanking(10));
 }
