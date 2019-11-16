@@ -76,6 +76,7 @@ function loadRanking() {
 		loadId("ranking").innerHTML = "" +
 		"Spiele: Platz " + playerStats.games + "<br>\n" +
 		"\t\t\tSpiele mit BAC: Platz " + playerStats.bac + "<br>\n" +
+		"\t\t\tMVP: Platz " + playerStats.mvp + "<br>\n" +
 		"\t\t\tWinlose: Platz " + playerStats.winlose + "<br>\n" +
 		"\t\t\tKD: Platz " + playerStats.kd + "<br>\n" +
 		"\t\t\tBetten: Platz " + playerStats.bac + "<br>\n" +
