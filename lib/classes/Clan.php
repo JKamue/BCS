@@ -206,6 +206,9 @@ class Clan
             Database::execute($updateMember, array(md5($this->id . $pair['id'])));
             Database::execute($updatePlayer, array($pair['name'], $pair['id']));
         }
+
+        $updatedLastRefreshed = "UPDATE clan SET DateUpdated = ? WHERE ClanUUID = ?";
+        Database::execute($updatedLastRefreshed,[date('Y-m-d H:i:s'), $this->id]);
     }
 
     public function save()
