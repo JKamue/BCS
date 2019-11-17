@@ -13,13 +13,15 @@ class Updater
         $clans = Database::select($fetch_incative_clans, array($formatted));
 
         for ($i = 0; $i < $maximum; $i++) {
-            $clan = Clan::getOrCreateClanByName($clans[$i][0]);
-            if ($clan->id() == "deleted") {
-                $maximum += 1;
-                echo $clans[$i][0] . " was deleted<br>\n";
-            } else {
-                $clan->setActivePlayers();
-                echo "updated " . $clans[$i][0] . "<br>\n";
+            if (isset($clans[$i][0])) {
+                $clan = Clan::getOrCreateClanByName($clans[$i][0]);
+                if ($clan->id() == "deleted") {
+                    $maximum += 1;
+                    echo $clans[$i][0] . " was deleted<br>\n";
+                } else {
+                    $clan->setActivePlayers();
+                    echo "updated " . $clans[$i][0] . "<br>\n";
+                }
             }
         }
     }
