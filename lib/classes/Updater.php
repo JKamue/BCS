@@ -15,7 +15,7 @@ class Updater
         for ($i = 0; $i < $maximum; $i++) {
             if (isset($clans[$i][0])) {
                 $clan = Clan::getOrCreateClanByName($clans[$i][0]);
-                if ($clan->id() == "deleted") {
+                if ($clan->id() == "deleted" or $clan->lastMatchid() == "notplayed") {
                     $maximum += 1;
                     echo $clans[$i][0] . " was deleted<br>\n";
                 } else {
