@@ -128,7 +128,7 @@ class GommeApi
 
                 if (strpos($type, "Clan Leader") !== false) {
                     $return['leader'] = $tmp;
-                } else  if (strpos($type, "Clan Mods") !== false) {
+                } else  if (strpos($type, "Moderatoren") !== false) {
                     $return['mods'] = $tmp;
                 } else {
                     $return['member'] = $tmp;
