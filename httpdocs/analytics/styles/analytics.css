@@ -1,0 +1,17 @@
+.navbar-analytics {
+	background-color: #2b89b4;
+}
+/* change the brand and text color */
+.navbar-analytics .navbar-brand,
+.navbar-analytics .navbar-text {
+	color: rgba(255,255,255,1);
+}
+/* change the link color */
+.navbar-analytics .navbar-nav .nav-link {
+	color: rgba(255,255,255,0.8);
+}
+/* change the color of active or hovered links */
+.navbar-analytics .nav-item.active .nav-link,
+.navbar-analytics .nav-item:hover .nav-link {
+	color: #ffffff;
+}
