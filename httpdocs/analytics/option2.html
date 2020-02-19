@@ -108,16 +108,19 @@
 				}
 			},
 			physics: {
-				stabilization: {
-					fit: false
+				forceAtlas2Based: {
+					gravitationalConstant: -10000,
+					centralGravity: 0.005,
+					springLength: 500,
+					springConstant: 0.18
 				},
-				barnesHut: {
-					theta: 1,
-					gravitationalConstant: -8000000,
-					springConstant: 0.001,
-					springLength: 2000,
-					centralGravity: 0.01,
-					timestep: 10000
+				maxVelocity: 146,
+				solver: 'forceAtlas2Based',
+				timestep: 0.2,
+				stabilization: {
+					enabled:true,
+					iterations:2000,
+					updateInterval:25
 				}
 			},
 			interaction: {

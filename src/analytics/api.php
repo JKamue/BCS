@@ -15,16 +15,16 @@ function getAllClansAndNumbers()
 
 function getAllMemberHistories(int $i)
 {
-    $sql = "SELECT clan.ClanName, player.name FROM `member`
+    $sql = "SELECT clan.ClanName, player.name, member.Active FROM `member`
 	JOIN clan ON clan.ClanUUID = member.ClanUUID
 	JOIN player ON player.UUID = member.UUID";
 
     $return = [];
     $return["reference"] = array();
     $data = Database::select($sql,[]);
-
+    $i+=10;
     foreach ($data as &$player) {
-        array_push($return["reference"], array($player["name"], $player["ClanName"]));
+        array_push($return["reference"], array($player["name"], $player["ClanName"], $player["Active"]));
         $return["nodes"][$i] = $player["name"];
         $i++;
     }
@@ -43,16 +43,14 @@ function createNodesAndEdges()
 
     $references = array();
     foreach ($membersReferences as &$reference) {
-        array_push($references, array($allNodes[$reference[0]],$allNodes[$reference[1]]));
+        if (isset($allNodes[$reference[0]]) && isset($allNodes[$reference[1]])) {
+            array_push($references, array($allNodes[$reference[0]], $allNodes[$reference[1]], $reference[2] == 1 ? 2 : 0.5));
+        }
     }
 
-    foreach ($allNodes as $name => $number) {
-        echo "{id: {$number}, label: '{$name}', x: 0, y: 0},\n";
-    }
-
-    echo "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
-
-    foreach ($references as &$reference) {
-        echo "{from: {$reference[0]}, to: {$reference[1]}},\n";
-    }
+    return [
+        "nodes" => $allNodes,
+        "edges" => $references,
+        "clan_amount" => count($clans)
+    ];
 }

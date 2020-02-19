@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+	<!-- Bootstrap-->
+	<link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.min.css" />
+	<script src="../lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="../scripts/searchField.js"></script>
+	<script src="api.php"></script>
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<!-- Stylesheet-->
+	<link rel="stylesheet" href="styles/analytics.css">
+
+	<!-- Meta Tags-->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="BCS oder Better CWBW Stats ist eine Website zur statistischen Auswertung von gespielten CWs.">
+	<meta name="keywords" content="BCS,Stats,Gomme,Minecraft">
+	<meta name="robots" content="index, nofollow">
+	<meta name="language" content="DE">
+	<meta name="generator" content="FreeMetaTagGenerator.com">
+
+	<title>Analytics</title>
+	<link rel='shortcut icon' type='image/x-icon' href='../img/favicon.ico' />
+
+	<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+	<style type="text/css">
+		html, body {
+			min-height: 100% !important;
+			height: 100%;
+		}
+
+		#mynetwork {
+			width: 98vw;
+			height: 90vh;
+			border: 1px solid lightgray;
+		}
+		#loadingBar {
+			position:absolute;
+			top:0px;
+			left:0px;
+			width: 98vw;
+			height: 90vh;
+			background-color:rgba(200,200,200,0.8);
+			-webkit-transition: all 0.5s ease;
+			-moz-transition: all 0.5s ease;
+			-ms-transition: all 0.5s ease;
+			-o-transition: all 0.5s ease;
+			transition: all 0.5s ease;
+			opacity:1;
+		}
+		#wrapper {
+			position:relative;
+			width:98vw;
+			height:90vh;
+		}
+
+		#text {
+			position:absolute;
+			top:8px;
+			left:530px;
+			width:30px;
+			height:50px;
+			margin:auto auto auto auto;
+			font-size:22px;
+			color: #000000;
+		}
+
+
+		div.outerBorder {
+			position:relative;
+			top:400px;
+			width:600px;
+			height:44px;
+			margin:auto auto auto auto;
+			border:8px solid rgba(0,0,0,0.1);
+			background: rgb(252,252,252); /* Old browsers */
+			background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+			background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+			border-radius:72px;
+			box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+		}
+
+		#border {
+			position:absolute;
+			top:10px;
+			left:10px;
+			width:500px;
+			height:23px;
+			margin:auto auto auto auto;
+			box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+			border-radius:10px;
+		}
+
+		#bar {
+			position:absolute;
+			top:0px;
+			left:0px;
+			width:20px;
+			height:20px;
+			margin:auto auto auto auto;
+			border-radius:11px;
+			border:2px solid rgba(30,30,30,0.05);
+			background: rgb(0, 173, 246); /* Old browsers */
+			box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+		}
+	</style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-analytics">
+	<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+				<a class="nav-link" href="index.html">Player-Relations</a>
+			</li>
+		</ul>
+	</div>
+	<div class="mx-auto order-0">
+		<a class="navbar-brand mx-auto" href="#">BCS Analytics</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+	</div>
+	<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+	</div>
+</nav>
+
+<div id="wrapper">
+	<div id="mynetwork"></div>
+	<div id="loadingBar">
+		<div class="outerBorder">
+			<div id="text">0%</div>
+			<div id="border">
+				<div id="bar"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	var network;
+
+	function redrawAll() {
+		// find player with: network.focus(812);
+
+		// remove positoins
+		for (var i = 0; i < nodes.length; i++) {
+			delete nodes[i].x;
+			delete nodes[i].y;
+		}
+
+		// create a network
+		var container = document.getElementById('mynetwork');
+		var data = {
+			nodes: nodes,
+			edges: edges
+		};
+		var options = {
+			nodes: {
+				shape: 'dot',
+				scaling: {
+					min: 20,
+					max: 60
+				},
+				font: {
+					size: 20,
+					face: 'Tahoma'
+				}
+			},
+			edges: {
+				width: 0.15,
+				color: {inherit: 'from'},
+				smooth: {
+					type: 'continuous'
+				}
+			},
+			physics: {
+				forceAtlas2Based: {
+					gravitationalConstant: -30000,
+					centralGravity: 0.004,
+					springLength: 700,
+					springConstant: 0.09
+				},
+				maxVelocity: 300,
+				solver: 'forceAtlas2Based',
+				timestep: 0.4,
+				stabilization: {
+					enabled:true,
+					iterations:6000,
+					updateInterval:25
+				}
+			},
+			interaction: {
+				tooltipDelay: 200,
+				hideEdgesOnDrag: true
+			}
+		};
+
+		// Note: data is coming from ./datasources/WorldCup2014.js
+		network = new vis.Network(container, data, options);
+
+		network.on("stabilizationProgress", function(params) {
+			var maxWidth = 496;
+			var minWidth = 20;
+			var widthFactor = params.iterations/params.total;
+			var width = Math.max(minWidth,maxWidth * widthFactor);
+
+			document.getElementById('bar').style.width = width + 'px';
+			document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+		});
+		network.once("stabilizationIterationsDone", function() {
+			document.getElementById('text').innerHTML = '100%';
+			document.getElementById('bar').style.width = '496px';
+			document.getElementById('loadingBar').style.opacity = 0;
+			network.stopSimulation();
+			// really clean the dom element
+			setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+		});
+
+	}
+
+	function findMe(name)
+	{
+		let id = 0;
+		for (const node in nodes) {
+			if (nodes[node].label === name) {
+				id = nodes[node].id;
+			}
+		}
+		if (id === 0) {
+			alert("Not found!");
+		} else {
+			network.focus(id, {scale: 0.5});
+		}
+	}
+
+	redrawAll()
+</script>
+</body>
