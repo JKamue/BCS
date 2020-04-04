@@ -63,6 +63,11 @@ WHERE LOWER(player.name) LIKE LOWER(?) GROUP BY player.name";
     return Database::select($sql,array("%".$term."%"));
 }
 
+function playerNameToUUID($name) {
+    $sql = "SELECT UUID FROM `player` WHERE name = ?";
+    return Database::select($sql,[$name]);
+}
+
 function getAllClanData($uuid) : Array
 {
     $clanstats = getClanStats($uuid);

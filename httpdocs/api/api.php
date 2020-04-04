@@ -44,4 +44,12 @@ if (isset($_GET['clanname'])) {
     echo json_encode(getAllClanstats());
 } elseif (isset($_GET['getRanking'])) {
     echo json_encode(getRanking(10));
+} elseif (isset($_GET['player'])) {
+    $names = playerNameToUUID($_GET['player']);
+    if(count($names) == 0) {
+        echo json_encode(array("error" => true, "mes" => "Player not in BCS"));
+        http_response_code(404);
+        exit();
+    }
+    echo json_encode(getPlayerStats($names[0]["UUID"]));
 }
