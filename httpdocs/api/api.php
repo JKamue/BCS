@@ -5,12 +5,33 @@ include ROOT . "/src/bcs/api.php";
 if (isset($_GET['clanname'])) {
     $name = $_GET['clanname'];
     $inBcs = Clan::nameInBCS($name);
-    if ($inBcs != false) {
-        echo json_encode(getAllClanData($inBcs));
-    } else {
+    if (!$inBcs) {
         echo json_encode(array("error" => true, "mes" => "Clan not in BCS"));
         http_response_code(404);
+        exit();
     }
+
+    if (isset($_GET["type"])) {
+        $type = $_GET["type"];
+        if ($type == "clan") {
+            echo json_encode(getClanStats($inBcs)[0]);
+            exit();
+        } elseif ($type == "member") {
+            echo json_encode(getMemberStats($inBcs));
+            exit();
+        } elseif ($type == "map") {
+            echo json_encode(getMapStats($inBcs));
+            exit();
+        } elseif ($type == "lineup") {
+            echo json_encode(getLineupStats($inBcs));
+            exit();
+        } elseif ($type == "enemy") {
+            echo json_encode(getEnemyStats($inBcs));
+            exit();
+        }
+    }
+    echo json_encode(getAllClanData($inBcs));
+
 } elseif (isset($_GET['bcsstats'])) {
     echo json_encode(getBCSStats());
 } elseif (isset($_GET['search'])) {
