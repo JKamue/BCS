@@ -1,5 +1,10 @@
 <?php
 
+if (!isset($_GET["SUPER-SECRET-KEY"])) {
+    echo "Auth failed!";
+    exit();
+}
+
 //TODO Validation
 
 ignore_user_abort(true);

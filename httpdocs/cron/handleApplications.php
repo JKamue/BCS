@@ -1,5 +1,10 @@
 <?php
 
+if (!isset($_GET["SUPER-SECRET-KEY"])) {
+    echo "Auth failed!";
+    exit();
+}
+
 ignore_user_abort(true);
 set_time_limit(6 * 60);
 ob_start();
@@ -46,7 +51,7 @@ sleep(10);
 try {
     Scanner::scanClan($name, false);
 } catch (Exception $e) {
-    echo "fuck";
+    echo "never going to see this";
 }
 
 Database::execute($update_query, [$id]);
