@@ -52,4 +52,8 @@ if (isset($_GET['clanname'])) {
         exit();
     }
     echo json_encode(getPlayerStats($names[0]["UUID"]));
+} elseif (isset($_GET['apply'])) {
+    include ROOT . "/src/apply/apply.php";
+    $clanname = $_GET["apply"];
+    echo applyClan($clanname);
 }
