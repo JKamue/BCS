@@ -153,6 +153,7 @@ FROM(SELECT player.name, member.MVP, member.Betten, member.Kills, member.Killed,
 	JOIN player
 	WHERE member.UUID= player.UUID
 	AND member.Active = TRUE
+    AND member.ClanUUID = ?
 	GROUP BY member.UUID) t
 JOIN(SELECT member.PlayerID, COUNT(game.GameID) AS Games, SUM(game.Win) AS Win
 	FROM lineup
@@ -164,7 +165,7 @@ JOIN(SELECT member.PlayerID, COUNT(game.GameID) AS Games, SUM(game.Win) AS Win
 	GROUP BY member.PlayerID) b ON t.PlayerID= b.PlayerID
 GROUP BY t.PlayerID;";
 
-    return Database::select($memberstats, array($uuid));
+    return Database::select($memberstats, [$uuid, $uuid]);
 }
 
 function getMapStats($uuid)
