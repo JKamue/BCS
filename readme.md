@@ -1,58 +1,77 @@
-# BCS (Better Cwbw Stats)
-Das BCS ist eine optimierte Darstellung von Minecraft Stats des Servers gommehd.net. Über eine eigens geschriebene API werden Clan- und Spielerstats abgefragt und zwischengespeichert. Später werden sie dann den Spielern detailliert ausgegeben. Das System ist derzeit unter [http://cwstats.de/](http://cwstats.de/) zu finden.
 
-Ich habe das System vor längerer Zeit geschrieben, heute würde ich sicher vieles anders machen, jedoch ist es mit **bis zu 400 täglichen Nutzern** (beim Launch) und **~80 täglichen Benutzern** mein erfolgreichstes Projekt bisher. Derzeit umfasst BCS **356 Clans** und **nahezu 2000 Spieler** mit **mehr als 140k Spielen**.
+<h1 align="center">
+  <br>
+  <a href="https://cwstats.de"><img src="http://cwstats.de/img/logo_leather_small.png" alt="Cwstats Logo" width="400"></a>
+</h1>
 
-## APIs
+<h4 align="center">GommeHDnet bedwars stats tracker</h4>
 
-Für BCS gibt es zwei APIs. Die erste nenne ich GommeApi, sie parst den Quelltext diverser gommehd.net Seiten und liefert die gewünschten Informationen zurück. Die zweite API verbindet das BCS Backend mit dem Frontend, liefert also die in BCS zwischengespeicherten Daten. Beide APIs sind öffentlich zugänglich und können gerne von jedem genutzt werden.
 
-### GommeApi
-Die Enpunkte der GommeApi kann man sich hier halbwegs interaktiv selber anschauen: [https://jkamue.de/bcs/api/apicheck.php](https://jkamue.de/bcs/api/apicheck.php)
-
-### BCS Api
-Die BCS Api besitzt alle wichtigen Endpunkte um ausgewertete Informationen abzufragen.
-
- - Endpunkt für Clanstats, diese können alle zusammen oder einzeln abgefragt werden
- - System Statistiken, wie viele Clans, Spieler, Lineups, etc. das System umfasst
- - Suche, diese sucht nach Spieler und Clannamen, sobald mehr als 2 Zeichen gegeben sind
- - Stats eines Spielers über die minecraft uuid / Stats eines Spielers über seinen Namen (nicht zu empfehlen)
- - Endpunkt für Übersichtsdaten aller Clans
- - Ranking, die besten 10 Spieler in jeder Kategorie
- - Bewerbung, um einen Clan für die automatische Anlegung zu bewerben
- 
- Gleichzeitig gibt es noch die interne Team API, sie kann über /team/api.php gefunden werden
-
-## Anderes
-
-Idee hinter der Ordnerstruktur (früher nur eine Notiz für mich aber lasse ich mal stehen):
-```
-/config           Configuration für Datenbanken und anderes
-/data             Alles was gespeichert werden muss
-  /cache          Cache
-  /logs           Logs
-    /cronjobs     Speichert Fehler in Cronjobs usw
-    /team         Speichert welches Teammitglied was autorisiert hat
-      /[mitglied] Unterordner für jedes Teammitglied
-  /tmp            Temporäre Dateien
-    /lastcw       Speichert zuletzt gescannten CW für jeden Clan
-/lib              Libraries       
-  /external       Externe Libraries           
-  /classes        Alle Klassen
-  /scripts        Kleine Scripts
-/src              Eigentlicher Quelltext
-  /api            Für die Api
-  /cronjobs       Für die Cronjobs
-  /team           Für das Team
-/httpdocs          Öffentlich zugänglich (frontend)
-```
-    
-#### Bei Fragen oder ähnlichem erreicht man mich gerne unter contact@jkamue.de
-<p align="right">
-<a href="https://twitter.com/BetterCWBWStats">
-    <img alt="Twitter: JKamue_dev" src="https://img.shields.io/twitter/follow/BetterCWBWStats.svg?style=social" target="_blank" />
-  </a>
- <a href="https://twitter.com/JKamue_dev">
-    <img alt="Twitter: JKamue_dev" src="https://img.shields.io/twitter/follow/JKamue_dev.svg?style=social" target="_blank" />
-  </a>
+<p align="center">
+  <a href="#about">About</a> •
+  <a href="#key-features">Key Features</a>
+  <a href="#apis">Apis</a>
 </p>
+
+<h1 align="center">
+<img src="http://cwstats.de/img/cwstats-demo.png" width="1000">
+</h1>
+
+## About
+
+Sadly GommeHDnet never wrote a nice page displaying various clan war stats even though they should have the data to do this easily.
+Since they don't have an API and did not want to provide me with one I had to write an own API parsing their html.
+
+The system is old, I would have done a lot different nowadays. Nonetheless **525 clans** with **roughly 3000 players** signed up.
+On launch day BCS had up to **400 users** but it quickly dropped to **~80 daily active users** which makes it my most used project so far.
+
+Due to a bad database layout as well as bad queries loading a clan now takes very long. I also <a href="https://twitter.com/BetterCWBWStats/status/1259823049903407106">dropped developement of BCS</a> in May 2020.
+I am planning to let it run unsupervised until August of 2021.
+
+  
+## Key Features
+
+The idea of BCS was to give the user as much information as possible and the demand shows that it succeeded.
+BCS displays a variety of different stats including:
+
+* Clanstats - detailed information for one (registered) clan
+  * Overall
+    * How many games did they play?
+    * Whats their winrate?
+    * Total playtime, last activity
+  * Enemies - How often did a clan face an enemy? How often did they win and loose?
+  * Map stats - What's the winrate on each map and how often did they play on it?
+  * Member stats - How did each member perform? What's their KD? How many beds did they destroy?
+  * Lineup stats - Shows which groups of 4 players perform the best
+* Playerstats - detailed information on a single player
+  * Resume - Which clans did they join in the past? How did the player perform there?
+  * Current stats
+    * Winrate, KD, played games
+    * Current ranking relative to all other BCS players
+  
+
+## Apis
+
+GommeHDnet never supported BCS - at least they tolerated it but this still meant that I had to find out how their system works in order to find enpoints I could parse to get useful information. BCS uses two different APIs. The first API is the one parsing information from GommeHDnet. This API has its own repo and can be found <a href="https://github.com/JKamue/GommeApi">here</a>
+ 
+The second API is used to query the stored and proccessed data from the BCS backend. 
+I encourage everybody to use it since it sends some great information taht could also be used in 3rd party software like plugins.
+Here is a short list of each endpoint:
+* Clanstats: http://cwstats.de/api/api.php?clanname=CowBuilders&type=clan
+* Memberstats (long loading time): http://cwstats.de/api/api.php?clanname=CowBuilders&type=member
+* Mapstats: http://cwstats.de/api/api.php?clanname=CowBuilders&type=map
+* Lineupstats: http://cwstats.de/api/api.php?clanname=CowBuilders&type=lineup
+* EnemyStats: http://cwstats.de/api/api.php?clanname=CowBuilders&type=enemy
+* All above (long loading time): http://cwstats.de/api/api.php?clanname=%7Bclanname%7D
+* Overall stats of the system itself http://cwstats.de/api/api.php?bcsstats
+* Search clans and players with a name http://cwstats.de/api/api.php?search=word
+* Member stats http://cwstats.de/api/api.php?member=memberId
+* Member stats by name http://cwstats.de/api/api.php?player=name
+* Basic stats of all clans http://cwstats.de/api/api.php?getAllClans
+* Get the current ranking http://cwstats.de/api/api.php?getRanking
+<br>
+
+---
+> [cwstats.de](https://www.cwstats.de) &nbsp;&middot;&nbsp;
+> Twitter [@JKamue_dev](https://twitter.com/JKamue_dev) &nbsp;&middot;&nbsp;
+> Twitter [@BetterCWBWStats](https://twitter.com/BetterCWBWStats)
