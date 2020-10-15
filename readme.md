@@ -9,7 +9,7 @@
 
 <p align="center">
   <a href="#about">About</a> •
-  <a href="#key-features">Key Features</a>
+  <a href="#key-features">Key Features</a> •
   <a href="#apis">Apis</a>
 </p>
 
